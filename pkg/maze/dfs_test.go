@@ -2,6 +2,7 @@ package maze
 
 import (
   "testing"
+  "reflect"
 )
 
 func TestUnvisitedNeighbours(t *testing.T) {
@@ -13,9 +14,10 @@ func TestUnvisitedNeighbours(t *testing.T) {
   p := Point { 1, 1}
   unvisitedNeighbours := dfs.unvisitedNeighbours(p)
 
-  numberOfUnvisitedNeighbours := len(unvisitedNeighbours)
-  if numberOfUnvisitedNeighbours != 2 {
-    t.Errorf("Point %v should have 2 unvisited neighbours but has %d: %v", p, numberOfUnvisitedNeighbours, unvisitedNeighbours)
+  expected := []Point{ {2, 1}, { 1, 0}}
+
+  if !reflect.DeepEqual(expected, unvisitedNeighbours) {
+    t.Fatalf("Expected %v, got %v", expected, unvisitedNeighbours)
   }
 
   
