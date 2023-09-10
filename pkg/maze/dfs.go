@@ -24,14 +24,19 @@ func NewDfsMazeGenerator(grid Grid) DfsMazeGenerator {
   }
 }
 
-//func (gen DfsMazeGenerator) unvisitedNeighbours(p Point) []Point {
-  //neighbours := gen.grid.Neighbours(p)
-  //unvisitedNeighbours := make([]Point, 0)
+func (gen DfsMazeGenerator) unvisitedNeighbours(p Point) []Point {
+  neighbours := gen.grid.Neighbours(p)
+  unvisitedNeighbours := make([]Point, 0)
 
-  //for neighbours := range neighbours {
-    
-  //}
-//}
+  for _, neighbour := range neighbours {
+    visited := Contains(gen.visited, neighbour)
+    if !visited {
+      unvisitedNeighbours = append(unvisitedNeighbours, neighbour)
+    }
+  }
+
+  return unvisitedNeighbours
+}
 
 //func (gen *DfsMazeGenerator) GenerateMaze() {
   //current := Point { 0, 0 }
