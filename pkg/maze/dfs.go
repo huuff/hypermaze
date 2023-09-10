@@ -23,3 +23,19 @@ func NewDfsMazeGenerator(grid Grid) DfsMazeGenerator {
     edges: make([][2]Point, 0),
   }
 }
+
+//func (gen DfsMazeGenerator) unvisitedNeighbours(p Point) []Point {
+  //neighbours := gen.grid.Neighbours(p)
+  //unvisitedNeighbours := make([]Point, 0)
+
+  //for neighbours := range neighbours {
+    
+  //}
+//}
+
+//func (gen *DfsMazeGenerator) GenerateMaze() {
+  //current := Point { 0, 0 }
+  //for len(gen.unvisited) > 0 {
+    //neighbours 
+  //}
+//}
