@@ -1,0 +1,13 @@
+<html>
+
+  <body>
+    <h1>Mazes</h1>
+    <ul>
+      {{ range $index, $maze := .Mazes }}
+        <li>
+          <a href="#">Level {{ $index }}</a>
+        </li>
+      {{ end }}
+    </ul>
+  </body>
+</html>
