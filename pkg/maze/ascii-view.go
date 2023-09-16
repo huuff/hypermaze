@@ -28,6 +28,7 @@ func (m Maze) isOpen(p grid.Point) bool {
   if p.X%2 == 0 && p.Y%2 == 0 {
     // Always just a wall
     return false
+    // TODO: Please DRY
   } else if p.X % 2 == 0 {
     for _, direction := range []Direction { East, West } {
       pointInDirection := direction.From(p)
@@ -41,7 +42,20 @@ func (m Maze) isOpen(p grid.Point) bool {
         return true
       }
     }
-    
+  } else if p.Y % 2 == 0 {
+    for _, direction := range []Direction { North, South } {
+      pointInDirection := direction.From(p)
+      pointInDirection = grid.Point { 
+        X: (pointInDirection.X-1)/2,
+        Y: (pointInDirection.Y-1)/2,
+      }
+
+      roomInDirection, exists := m.Rooms[pointInDirection]
+      if exists && roomInDirection.IsOpenTowards(direction.inverse()) {
+        return true
+      }
+    }
+
   }
 
 
