@@ -1,9 +1,11 @@
 package maze
 
 import (
+	"fmt"
+
 	"github.com/samber/lo"
+	"xyz.haff/maze/pkg/generators"
 	"xyz.haff/maze/pkg/grid"
-  "fmt"
 )
 
 type Direction byte
@@ -68,7 +70,7 @@ type Maze struct {
   rooms map[grid.Point]*Room
 }
 
-func NewMaze(g grid.Grid, edges [][2]grid.Point) *Maze {
+func NewMaze(g grid.Grid, edges generators.Passages) *Maze {
   rooms := make(map[grid.Point]*Room) 
 
   for x := range lo.Range(g.Width) {
