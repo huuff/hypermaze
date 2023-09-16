@@ -32,6 +32,21 @@ func (d Direction) inverse() Direction {
   panic(fmt.Sprintf("No inverse found for direction %d", d))
 }
 
+func (d Direction) From(p grid.Point) grid.Point {
+  switch d {
+    case North:
+      return grid.Point { p.X, p.Y - 1}
+    case East:
+      return grid.Point { p.X + 1, p.Y }
+    case South:
+      return grid.Point { p.X, p.Y + 1}
+    case West:
+      return grid.Point { p.X - 1, p.Y }
+  } 
+
+  panic(fmt.Sprintf("No next point found for direction %d", d))
+}
+
 func directionBetween(p1 grid.Point, p2 grid.Point) Direction {
   switch {
   case p2.X == (p1.X - 1):
