@@ -17,19 +17,29 @@ func isConnectionPoint(p grid.Point) bool {
   return (p.X != 0 && p.X%2 == 0) || (p.Y != 0 && p.Y%2 == 0)
 }
 
-// Gets the points that are arround a connection point
-func surroundingPoints(p grid.Point) [4]grid.Point {
+
+var directions [4]Direction = [4]Direction { North, East, South, West}
+
+func (m Maze) isOpen(p grid.Point) bool {
   if !isConnectionPoint(p) {
-    panic(fmt.Sprintf("Called `surroundingPoints` on %v, which is not a connection point", p))
+    panic(fmt.Sprintf("Called `isOpen` on %v, which is not a connection point", p))
   }
 
-  result := [4]grid.Point {
-    North.From(p),
-    East.From(p),
-    South.From(p),
-    West.From(p),
+
+  for _, direction := range directions {
+    pointInDirection := direction.From(p)
+    pointInDirection = grid.Point { 
+      X: (pointInDirection.X-1)/2,
+      Y: (pointInDirection.Y-1)/2,
+    }
+
+    roomInDirection, exists := m.Rooms[pointInDirection]
+    if exists && roomInDirection.IsOpenTowards(direction.inverse()) {
+      return true
+    }
   }
-  return result
+
+  return false
 }
 
 func (m Maze) AsciiView() {
@@ -39,9 +49,11 @@ func (m Maze) AsciiView() {
       if isExteriorPoint(m.Grid, p) {
         fmt.Print("#")
       } else if isConnectionPoint(p) {
-        //surroundings := surroundingPoints(p)
-        //fmt.Printf("\nSurroundings of %v:\n%v\n", p, surroundings)
-        fmt.Printf("%")
+        if m.isOpen(p) {
+          fmt.Print(" ")
+        } else {
+          fmt.Print("%")
+        }
       } else {
         fmt.Print(" ")
       }

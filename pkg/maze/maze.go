@@ -8,6 +8,7 @@ import (
 	"xyz.haff/maze/pkg/grid"
 )
 
+// TODO: Split direction stuff to its own package
 type Direction byte
 
 const (
@@ -80,6 +81,12 @@ func (thisRoom *Room) addConnection(otherRoom *Room) {
   thisRoom.Connections[direction] = otherRoom
   otherRoom.Connections[direction.inverse()] = thisRoom
 } 
+
+func (room Room) IsOpenTowards(d Direction) bool {
+  _, ok := room.Connections[d]
+
+  return ok
+}
 
 type Maze struct {
   Grid grid.Grid
