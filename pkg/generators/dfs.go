@@ -6,6 +6,7 @@ import (
 	"time"
   "slices"
   "xyz.haff/maze/pkg/grid"
+  "github.com/samber/lo"
 )
 
 type DfsMazeGenerator struct {
@@ -21,8 +22,8 @@ func NewDfsMazeGenerator(g grid.Grid) DfsMazeGenerator {
   random := rand.New(randomSource)
 
   unvisited := make([]grid.Point, g.Width * g.Height)
-  for x := 0; x < g.Width; x++ {
-    for y := 0; y < g.Height; y++ {
+  for x := range lo.Range(g.Width) {
+    for y := range lo.Range(g.Height) {
       unvisited = append(unvisited, grid.Point { x, y})
     }
   }
