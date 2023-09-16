@@ -25,19 +25,25 @@ func (m Maze) isOpen(p grid.Point) bool {
     panic(fmt.Sprintf("Called `isOpen` on %v, which is not a connection point", p))
   }
 
+  if p.X%2 == 0 && p.Y%2 == 0 {
+    // Always just a wall
+    return false
+  } else if p.X % 2 == 0 {
+    for _, direction := range []Direction { East, West } {
+      pointInDirection := direction.From(p)
+      pointInDirection = grid.Point { 
+        X: (pointInDirection.X-1)/2,
+        Y: (pointInDirection.Y-1)/2,
+      }
 
-  for _, direction := range directions {
-    pointInDirection := direction.From(p)
-    pointInDirection = grid.Point { 
-      X: (pointInDirection.X-1)/2,
-      Y: (pointInDirection.Y-1)/2,
+      roomInDirection, exists := m.Rooms[pointInDirection]
+      if exists && roomInDirection.IsOpenTowards(direction.inverse()) {
+        return true
+      }
     }
-
-    roomInDirection, exists := m.Rooms[pointInDirection]
-    if exists && roomInDirection.IsOpenTowards(direction.inverse()) {
-      return true
-    }
+    
   }
+
 
   return false
 }
