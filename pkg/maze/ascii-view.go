@@ -1,30 +1,39 @@
 package maze
 
 import (
+	"bytes"
 	"fmt"
 
-  "xyz.haff/maze/pkg/grid"
 	"github.com/samber/lo"
+	"xyz.haff/maze/pkg/grid"
 )
 
-func (m Maze) AsciiView() {
+func (m Maze) AsciiView() string {
+  var buf bytes.Buffer
+
   for y := range lo.Range((m.Grid.Height * 2) + 1) {
     for x := range lo.Range((m.Grid.Width * 2) + 1) {
       p := grid.Point { x, y }
       if isExteriorPoint(m.Grid, p) {
-        fmt.Print("#")
+        buf.WriteString("#")
       } else if isConnectionPoint(p) {
         if m.isOpen(p) {
-          fmt.Print(" ")
+          buf.WriteString(" ")
         } else {
-          fmt.Print("%")
+          buf.WriteString("%")
         }
       } else {
-        fmt.Print(" ")
+        buf.WriteString(" ")
       }
     }
-    fmt.Print("\n")
+
+    if y < m.Grid.Height*2 {
+      // Add a newline to each row before the last
+      buf.WriteString("\n")
+    }
   }
+
+  return buf.String()
 }
 
 // These are the outermost points created only for showing exterior walls and displaying the exit, they can't have any other connections

@@ -1,6 +1,7 @@
 package maze
 
 import (
+	"strings"
 	"testing"
 
 	"xyz.haff/maze/pkg/grid"
@@ -18,6 +19,7 @@ func fakeRoom(x, y int) *Room {
 }
 
 func TestAsciiView(t *testing.T) {
+  // ARRANGE
   midLeftRoom := fakeRoom(0, 1)
   midCenterRoom := fakeRoom(1, 1)
   midRightRoom := fakeRoom(2, 1)
@@ -26,17 +28,6 @@ func TestAsciiView(t *testing.T) {
   midCenterRoom.Connections[West] = midLeftRoom
   midCenterRoom.Connections[East] = midRightRoom
   midRightRoom.Connections[West] = midLeftRoom
-
-  // Should give a view like
-  /*
-    #######
-    # % % #
-    #%%%%%#
-    #     #
-    #%%%%%#
-    # % % #
-    #######
-  */
 
   maze := Maze {
     Grid: grid.Grid { Height: 3, Width: 3 },
@@ -53,6 +44,21 @@ func TestAsciiView(t *testing.T) {
     },
   }
 
-  // TODO: Actually assert, for which I actually have to return the AsciiView as a string
-  maze.AsciiView()
+  expected := strings.TrimSpace(`
+#######
+# % % #
+#%%%%%#
+#     #
+#%%%%%#
+# % % #
+#######
+`)
+
+  // ACT
+  actual := maze.AsciiView()
+
+  // ASSERT
+  if actual != expected {
+    t.Fatalf("\nExpected:\n%s\nGot:\n%s", expected, actual)
+  }
 }
