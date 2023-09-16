@@ -1,12 +1,13 @@
 package main
 
 import (
-  "maze/pkg/maze"
+  "xyz.haff/maze/pkg/grid"
+  "xyz.haff/maze/pkg/generators"
 )
 
 func main() {
-  grid := maze.Grid { Width: 5, Height: 5 }
-  dfs := maze.NewDfsMazeGenerator(grid)
+  grid := grid.Grid { Width: 5, Height: 5 }
+  dfs := generators.NewDfsMazeGenerator(grid)
   dfs.GenerateMaze()
 } 
 

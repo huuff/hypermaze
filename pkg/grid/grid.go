@@ -1,4 +1,4 @@
-package maze
+package grid
 
 type Point struct {
   X int
