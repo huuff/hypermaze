@@ -1,7 +1,6 @@
 package generators
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
   "slices"
@@ -66,7 +65,6 @@ func (gen *DfsPassageGenerator) randomizedDfs(p grid.Point) {
     neighbours := gen.unvisitedNeighbours(p)
     randomIndex := gen.random.Intn(len(neighbours))
     next := neighbours[randomIndex]
-    fmt.Printf("Next: %v\n", next)
 
     gen.passages = append(gen.passages, [2]grid.Point { p, next })
     gen.randomizedDfs(next)
