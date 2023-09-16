@@ -67,7 +67,8 @@ func (thisRoom *Room) addConnection(otherRoom *Room) {
 } 
 
 type Maze struct {
-  rooms map[grid.Point]*Room
+  Grid grid.Grid
+  Rooms map[grid.Point]*Room
 }
 
 func NewMaze(g grid.Grid, edges generators.Passages) *Maze {
@@ -86,5 +87,8 @@ func NewMaze(g grid.Grid, edges generators.Passages) *Maze {
     r1.addConnection(r2)
   }
 
-  return &Maze { rooms: rooms }
+  return &Maze { 
+    Grid: g,
+    Rooms: rooms,
+  }
 }
