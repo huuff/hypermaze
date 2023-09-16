@@ -18,7 +18,7 @@ type Room struct {
   connections map[Direction]*Room
 }
 
-func NewRoom() *Room {
+func newRoom() *Room {
   return &Room {
     connections: make(map[Direction]*Room),
   }
@@ -33,7 +33,7 @@ func NewMaze(g grid.Grid, edges []grid.Point) *Maze {
 
   for x := range lo.Range(g.Width) {
     for y := range lo.Range(g.Height) {
-
+      rooms[grid.Point { x, y }] = newRoom()
     }
   }
   return &Maze { rooms: rooms }
