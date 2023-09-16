@@ -18,6 +18,7 @@ func fakeRoom(x, y int) *Room {
   }
 }
 
+// TODO: Add another test with some vertical passages
 func TestAsciiView(t *testing.T) {
   // ARRANGE
   midLeftRoom := fakeRoom(0, 1)
