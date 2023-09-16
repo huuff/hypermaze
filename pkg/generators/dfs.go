@@ -9,15 +9,15 @@ import (
   "github.com/samber/lo"
 )
 
-type DfsMazeGenerator struct {
+type DfsPassageGenerator struct {
   random *rand.Rand
   grid grid.Grid
   visited []grid.Point
   unvisited []grid.Point
-  edges [][2]grid.Point
+  passages [][2]grid.Point
 }
 
-func NewDfsMazeGenerator(g grid.Grid) DfsMazeGenerator {
+func NewDfsPassageGenerator(g grid.Grid) DfsPassageGenerator {
   randomSource := rand.NewSource(time.Now().Unix())
   random := rand.New(randomSource)
 
@@ -28,16 +28,16 @@ func NewDfsMazeGenerator(g grid.Grid) DfsMazeGenerator {
     }
   }
 
-  return DfsMazeGenerator {
+  return DfsPassageGenerator {
     random: random,
     grid: g,
     unvisited: unvisited,
     visited: make([]grid.Point, g.Width * g.Height),
-    edges: make([][2]grid.Point, 0),
+    passages: make(Passages, 0),
   }
 }
 
-func (gen *DfsMazeGenerator) unvisitedNeighbours(p grid.Point) []grid.Point {
+func (gen *DfsPassageGenerator) unvisitedNeighbours(p grid.Point) []grid.Point {
   neighbours := gen.grid.Neighbours(p)
   unvisitedNeighbours := make([]grid.Point, 0)
 
@@ -51,13 +51,14 @@ func (gen *DfsMazeGenerator) unvisitedNeighbours(p grid.Point) []grid.Point {
   return unvisitedNeighbours
 }
 
-func (gen *DfsMazeGenerator) GenerateMaze() {
+func (gen *DfsPassageGenerator) GeneratePassages() Passages {
   startingPoint := grid.Point { 0, 0 }
   gen.randomizedDfs(startingPoint)
+  return gen.passages
 }
 
 
-func (gen *DfsMazeGenerator) randomizedDfs(p grid.Point) {
+func (gen *DfsPassageGenerator) randomizedDfs(p grid.Point) {
   gen.visited = append(gen.visited, p)
 
   for len(gen.unvisitedNeighbours(p)) > 0 {
@@ -67,7 +68,7 @@ func (gen *DfsMazeGenerator) randomizedDfs(p grid.Point) {
     next := neighbours[randomIndex]
     fmt.Printf("Next: %v\n", next)
 
-    gen.edges = append(gen.edges, [2]grid.Point { p, next })
+    gen.passages = append(gen.passages, [2]grid.Point { p, next })
     gen.randomizedDfs(next)
   }
 }

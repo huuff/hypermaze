@@ -7,7 +7,7 @@ import (
 )
 
 func TestUnvisitedNeighbours(t *testing.T) {
-  dfs := DfsMazeGenerator {
+  dfs := DfsPassageGenerator {
     grid: grid.Grid { Height: 5, Width: 5 },
     visited: []grid.Point{ {0,1}, {1,2}},
   }

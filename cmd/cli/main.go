@@ -7,7 +7,7 @@ import (
 
 func main() {
   grid := grid.Grid { Width: 5, Height: 5 }
-  dfs := generators.NewDfsMazeGenerator(grid)
-  dfs.GenerateMaze()
+  dfs := generators.NewDfsPassageGenerator(grid)
+  dfs.GeneratePassages()
 } 
 
