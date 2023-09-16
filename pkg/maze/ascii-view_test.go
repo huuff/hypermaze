@@ -54,5 +54,6 @@ func TestAsciiView(t *testing.T) {
     },
   }
 
+  // TODO: Actually assert, for which I actually have to return the AsciiView as a string
   maze.AsciiView()
 }
