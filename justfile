@@ -1,5 +1,5 @@
 run:
-  go run ./cmd/cli
+  go run ./cmd/web
 
 test:
   go test ./...
