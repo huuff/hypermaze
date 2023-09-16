@@ -13,7 +13,7 @@
   {
     devShell.${system} = pkgs.mkShell {
       buildInputs = with pkgs; [
-          go
+          go_1_21
       ];
     };
   };

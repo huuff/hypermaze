@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+  "slices"
 )
 
 type DfsMazeGenerator struct {
@@ -39,7 +40,7 @@ func (gen *DfsMazeGenerator) unvisitedNeighbours(p Point) []Point {
   unvisitedNeighbours := make([]Point, 0)
 
   for _, neighbour := range neighbours {
-    visited := Contains(gen.visited, neighbour)
+    visited := slices.Contains(gen.visited, neighbour)
     if !visited {
       unvisitedNeighbours = append(unvisitedNeighbours, neighbour)
     }
