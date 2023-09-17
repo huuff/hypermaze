@@ -1,7 +1,8 @@
 package main
 
 import (
-  "net/http"
+	"fmt"
+	"net/http"
 )
 
 func main() {
@@ -9,11 +10,14 @@ func main() {
     mazes: generateMazes(),
   }
 
+  port := "8080"
+
   server := http.Server {
-    Addr: ":8080",
+    Addr: ":" + port,
     Handler: app.routes(),
   }
 
+  fmt.Printf("Starting server on port %s\n", port)
   if err := server.ListenAndServe(); err != nil {
     panic(err)
   }
