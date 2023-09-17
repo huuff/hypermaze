@@ -42,6 +42,7 @@ func (app application) routes() http.Handler {
   router := mux.NewRouter()
   router.HandleFunc("/", app.index)
   router.HandleFunc("/mazes/{level}/minimap", app.minimap)
+  router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./static/"))))
   
   return router
 }
