@@ -2,9 +2,10 @@ package maze
 
 import (
 	"github.com/samber/lo"
+	"xyz.haff/maze/pkg/boundary"
+	"xyz.haff/maze/pkg/direction"
 	"xyz.haff/maze/pkg/generators"
 	"xyz.haff/maze/pkg/grid"
-  "xyz.haff/maze/pkg/direction"
 )
 
 type Room struct {
@@ -34,6 +35,8 @@ func (room Room) IsOpenTowards(d direction.Direction) bool {
 type Maze struct {
   Grid grid.Grid
   Rooms map[grid.Point]*Room
+  Entrance boundary.Boundary
+  Exit boundary.Boundary
 }
 
 func NewMaze(g grid.Grid, edges generators.Passages) *Maze {
@@ -52,8 +55,23 @@ func NewMaze(g grid.Grid, edges generators.Passages) *Maze {
     r1.addConnection(r2)
   }
 
+  exitAndEntrance := chooseExitAndEntrance(g)
+
   return &Maze { 
     Grid: g,
     Rooms: rooms,
+    Entrance: exitAndEntrance[0],
+    Exit: exitAndEntrance[1],
   }
+}
+
+func chooseExitAndEntrance(g grid.Grid) [2]boundary.Boundary {
+  boundaries := boundary.FindAll(g)
+  entrance := lo.Sample(boundaries)
+  boundaries = lo.Reject(boundaries, func(b boundary.Boundary, i int) bool {
+    return b == entrance
+  })
+  exit := lo.Sample(boundaries)
+
+  return [2]boundary.Boundary { entrance, exit }
 }

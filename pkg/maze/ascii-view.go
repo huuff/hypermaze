@@ -9,6 +9,7 @@ import (
 	"xyz.haff/maze/pkg/direction"
 )
 
+// TODO: Print entrance and exit
 func (m Maze) AsciiView() string {
   var buf bytes.Buffer
 
