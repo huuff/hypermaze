@@ -7,8 +7,8 @@ import (
 )
 
 type Boundary struct {
-  location grid.Point
-  direction direction.Direction
+  Location grid.Point
+  Direction direction.Direction
 }
 
 func FindAll(g grid.Grid) []Boundary {
