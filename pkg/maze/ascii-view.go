@@ -69,11 +69,7 @@ func (m Maze) isOpen(p grid.Point) bool {
 
 func (m Maze) isOpenInDirections(p grid.Point, directions []direction.Direction) bool {
   for _, direction := range directions {
-    pointInDirection := direction.From(p)
-    pointInDirection = grid.Point { 
-      X: (pointInDirection.X-1)/2,
-      Y: (pointInDirection.Y-1)/2,
-    }
+    pointInDirection := unexpandedPoint(direction.From(p))
 
     roomInDirection, exists := m.Rooms[pointInDirection]
     if exists && roomInDirection.IsOpenTowards(direction.Inverse()) {
@@ -82,5 +78,17 @@ func (m Maze) isOpenInDirections(p grid.Point, directions []direction.Direction)
   }
 
   return false
+}
+
+/*
+  Since we expand the map (multiplying by 2 and adding 1 to sizes)
+  in order to print it, this method returns the "unexpanded" point,
+  which corresponds to the actual point in the map
+*/
+func unexpandedPoint(p grid.Point) grid.Point {
+  return grid.Point {
+    X: (p.X-1)/2,
+    Y: (p.Y-1)/2,
+  }
 }
 
