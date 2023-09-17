@@ -1,9 +1,12 @@
 package main
 
 import (
-  "net/http"
-  "html/template"
-  "fmt"
+	"fmt"
+	"html/template"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 func (app application) index(w http.ResponseWriter, r *http.Request) {
@@ -22,9 +25,34 @@ func (app application) index(w http.ResponseWriter, r *http.Request) {
   })
 }
 
+func (app application) minimap(w http.ResponseWriter, r *http.Request) {
+  vars := mux.Vars(r)
+  level, err := strconv.Atoi(vars["level"])
+  if err != nil {
+    // TODO: Actual log for the error
+    fmt.Println(err.Error())
+  }
+
+  ts, err := template.ParseFiles("./cmd/web/templates/minimap.html.gotmpl")
+
+  if err != nil {
+    // TODO: Actual log for the error
+    fmt.Println(err.Error())
+    w.WriteHeader(http.StatusInternalServerError)
+    w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
+    return
+  }
+
+  ts.Execute(w, map[string]any {
+    "Level": level,
+    "Minimap": app.mazes[level].AsciiView(),
+  })
+}
+
 func (app application) routes() http.Handler {
-  mux := http.NewServeMux()
-  mux.HandleFunc("/", app.index)
+  router := mux.NewRouter()
+  router.HandleFunc("/", app.index)
+  router.HandleFunc("/mazes/{level}/minimap", app.minimap)
   
-  return mux
+  return router
 }
