@@ -27,8 +27,7 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
     fmt.Println(err.Error())
   }
 
-  err = app.templates.pages["minimap.html.gotmpl"].Execute(w, map[string]any {
-    "Level": level,
+  err = app.templates.partials.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
     "Minimap": app.mazes[level].AsciiView(),
   })
 

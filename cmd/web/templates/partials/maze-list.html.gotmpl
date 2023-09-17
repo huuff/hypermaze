@@ -1,7 +1,11 @@
 <ul>
   {{ range $index, $maze := .Mazes }}
     <li>
-      <a href="/mazes/{{ $index }}/minimap">Level {{ $index }}</a>
+      <a href="#" 
+        hx-get="/mazes/{{$index}}/minimap" 
+        hx-trigger="mouseenter"
+        hx-swap="afterend"
+      >Level {{ $index }}</a>
     </li>
   {{ end }}
 </ul>
