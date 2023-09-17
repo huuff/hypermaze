@@ -20,7 +20,7 @@ func (m Maze) AsciiView() string {
         if m.isOpen(p) {
           buf.WriteString(" ")
         } else {
-          buf.WriteString("%")
+          buf.WriteString("#")
         }
       } else {
         buf.WriteString(" ")

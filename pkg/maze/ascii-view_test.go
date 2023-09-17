@@ -47,11 +47,11 @@ func TestAsciiView(t *testing.T) {
 
   expected := strings.TrimSpace(`
 #######
-# % % #
-#%%%%%#
+# # # #
+#######
 #     #
-#%%%%%#
-# % % #
+#######
+# # # #
 #######
 `)
 
