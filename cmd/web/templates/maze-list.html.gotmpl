@@ -1,0 +1,7 @@
+<ul>
+  {{ range $index, $maze := .Mazes }}
+    <li>
+      <a href="/mazes/{{ $index }}/minimap">Level {{ $index }}</a>
+    </li>
+  {{ end }}
+</ul>
