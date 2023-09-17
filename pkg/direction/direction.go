@@ -1,11 +1,10 @@
-package maze
+package direction
 
 import (
   "fmt"
   "xyz.haff/maze/pkg/grid"
 )
 
-// TODO: Split direction stuff to its own package
 type Direction byte
 
 const (
@@ -15,7 +14,7 @@ const (
   South
 )
 
-func (d Direction) inverse() Direction {
+func (d Direction) Inverse() Direction {
   switch d {
     case North:
       return South
@@ -45,7 +44,7 @@ func (d Direction) From(p grid.Point) grid.Point {
   panic(fmt.Sprintf("No next point found for direction %d", d))
 }
 
-func directionBetween(p1 grid.Point, p2 grid.Point) Direction {
+func Between(p1 grid.Point, p2 grid.Point) Direction {
   switch {
   case p2.X == (p1.X - 1):
     return West

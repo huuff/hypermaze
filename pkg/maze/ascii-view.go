@@ -6,6 +6,7 @@ import (
 
 	"github.com/samber/lo"
 	"xyz.haff/maze/pkg/grid"
+	"xyz.haff/maze/pkg/direction"
 )
 
 func (m Maze) AsciiView() string {
@@ -47,8 +48,6 @@ func isConnectionPoint(p grid.Point) bool {
 }
 
 
-var directions [4]Direction = [4]Direction { North, East, South, West}
-
 func (m Maze) isOpen(p grid.Point) bool {
   if !isConnectionPoint(p) {
     panic(fmt.Sprintf("Called `isOpen` on %v, which is not a connection point", p))
@@ -57,9 +56,9 @@ func (m Maze) isOpen(p grid.Point) bool {
   if p.X%2 == 0 && p.Y%2 == 0 {
     // Always just a wall
     return false
-  } else if p.X % 2 == 0 && m.isOpenInDirections(p, []Direction { West, East }){
+  } else if p.X % 2 == 0 && m.isOpenInDirections(p, []direction.Direction { direction.West, direction.East }){
     return true
-  } else if p.Y % 2 == 0  && m.isOpenInDirections(p, []Direction { North, South }){
+  } else if p.Y % 2 == 0  && m.isOpenInDirections(p, []direction.Direction { direction.North, direction.South }){
     return true
   }
 
@@ -67,7 +66,7 @@ func (m Maze) isOpen(p grid.Point) bool {
   return false
 }
 
-func (m Maze) isOpenInDirections(p grid.Point, directions []Direction) bool {
+func (m Maze) isOpenInDirections(p grid.Point, directions []direction.Direction) bool {
   for _, direction := range directions {
     pointInDirection := direction.From(p)
     pointInDirection = grid.Point { 
@@ -76,7 +75,7 @@ func (m Maze) isOpenInDirections(p grid.Point, directions []Direction) bool {
     }
 
     roomInDirection, exists := m.Rooms[pointInDirection]
-    if exists && roomInDirection.IsOpenTowards(direction.inverse()) {
+    if exists && roomInDirection.IsOpenTowards(direction.Inverse()) {
       return true
     }
   }

@@ -4,27 +4,28 @@ import (
 	"github.com/samber/lo"
 	"xyz.haff/maze/pkg/generators"
 	"xyz.haff/maze/pkg/grid"
+  "xyz.haff/maze/pkg/direction"
 )
 
 type Room struct {
   Location grid.Point
-  Connections map[Direction]*Room
+  Connections map[direction.Direction]*Room
 }
 
 func newRoom(location grid.Point) *Room {
   return &Room {
     Location: location,
-    Connections: make(map[Direction]*Room),
+    Connections: make(map[direction.Direction]*Room),
   }
 }
 
 func (thisRoom *Room) addConnection(otherRoom *Room) {
-  direction := directionBetween(thisRoom.Location, otherRoom.Location)
+  direction := direction.Between(thisRoom.Location, otherRoom.Location)
   thisRoom.Connections[direction] = otherRoom
-  otherRoom.Connections[direction.inverse()] = thisRoom
+  otherRoom.Connections[direction.Inverse()] = thisRoom
 } 
 
-func (room Room) IsOpenTowards(d Direction) bool {
+func (room Room) IsOpenTowards(d direction.Direction) bool {
   _, ok := room.Connections[d]
 
   return ok
