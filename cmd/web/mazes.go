@@ -21,4 +21,3 @@ func generateMazes() []*maze.Maze {
   })
 }
 
-var Mazes []*maze.Maze = generateMazes()
