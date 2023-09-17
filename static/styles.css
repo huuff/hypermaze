@@ -17,3 +17,19 @@ h1 {
 pre {
   font-family: monospace;
 }
+
+.relative {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: white;
+  z-index: 10;
+  left: 50%;
+
+  border: 1px solid gray;
+  border-radius: 8px;
+
+  padding: 4px;
+}
