@@ -8,6 +8,7 @@ import (
 func main() {
   app := application {
     mazes: generateMazes(),
+    templates: newTemplateCache(),
   }
 
   port := "8080"

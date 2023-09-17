@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 
@@ -10,19 +9,14 @@ import (
 )
 
 func (app application) index(w http.ResponseWriter, r *http.Request) {
-  ts, err := template.ParseFiles("./cmd/web/templates/index.html.gotmpl")
+  err := app.templates.ExecuteTemplate(w, "index.html.gotmpl", map[string]any {
+    "Mazes": app.mazes,
+  })
 
   if err != nil {
     // TODO: Actual log for the error
     fmt.Println(err.Error())
-    w.WriteHeader(http.StatusInternalServerError)
-    w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
-    return
   }
-
-  ts.Execute(w, map[string]any {
-    "Mazes": app.mazes,
-  })
 }
 
 func (app application) minimap(w http.ResponseWriter, r *http.Request) {
@@ -33,20 +27,15 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
     fmt.Println(err.Error())
   }
 
-  ts, err := template.ParseFiles("./cmd/web/templates/minimap.html.gotmpl")
+  err = app.templates.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
+    "Level": level,
+    "Minimap": app.mazes[level].AsciiView(),
+  })
 
   if err != nil {
     // TODO: Actual log for the error
     fmt.Println(err.Error())
-    w.WriteHeader(http.StatusInternalServerError)
-    w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
-    return
   }
-
-  ts.Execute(w, map[string]any {
-    "Level": level,
-    "Minimap": app.mazes[level].AsciiView(),
-  })
 }
 
 func (app application) routes() http.Handler {
