@@ -9,7 +9,7 @@ import (
 )
 
 func (app application) index(w http.ResponseWriter, r *http.Request) {
-  err := app.templates.ExecuteTemplate(w, "index.html.gotmpl", map[string]any {
+  err := app.templates.pages["index.html.gotmpl"].Execute(w, map[string]any {
     "Mazes": app.mazes,
   })
 
@@ -27,7 +27,7 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
     fmt.Println(err.Error())
   }
 
-  err = app.templates.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
+  err = app.templates.pages["minimap.html.gotmpl"].Execute(w, map[string]any {
     "Level": level,
     "Minimap": app.mazes[level].AsciiView(),
   })

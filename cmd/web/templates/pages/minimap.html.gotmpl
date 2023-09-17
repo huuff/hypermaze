@@ -1,7 +1,6 @@
-<html>
-
-  <body>
+{{ define "content" }}
     <h1>Maze Level {{ .Level }}: Minimap</h1>
     <pre>{{ .Minimap }}</pre>
-  </body>
-</html>
+{{ end }}
+
+{{ template "base.html.gotmpl" . }}
