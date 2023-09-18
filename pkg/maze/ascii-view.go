@@ -30,10 +30,10 @@ func (m Maze) AsciiView() string {
   for y := range lo.Range((m.Grid.Height * 2) + 1) {
     for x := range lo.Range((m.Grid.Width * 2) + 1) {
       p := ExpandedPoint { x, y }
-      if isExteriorPoint(m.Grid, p) {
-        buf.WriteString(m.exteriorPointView(p))
-      } else if isConnectionPoint(p) {
-        buf.WriteString(m.connectionPointView(p))
+      if isExterior(m.Grid, p) {
+        buf.WriteString(m.exteriorView(p))
+      } else if isConnection(p) {
+        buf.WriteString(m.connectionView(p))
       } else {
         buf.WriteString(" ")
       }
@@ -49,11 +49,11 @@ func (m Maze) AsciiView() string {
 }
 
 // These are the outermost points created only for showing exterior walls and displaying the exit, they can't have any other connections
-func isExteriorPoint(g grid.Grid, p ExpandedPoint) bool {
+func isExterior(g grid.Grid, p ExpandedPoint) bool {
   return p.X == 0  || p.Y == 0 || p.X == g.Width*2 || p.Y == g.Height*2
 }
 
-func (m Maze) exteriorPointView(p ExpandedPoint) string {
+func (m Maze) exteriorView(p ExpandedPoint) string {
   if p.X%2==0 && p.Y%2==0 {
     return "#"
   }
@@ -87,21 +87,23 @@ func (m Maze) exteriorPointView(p ExpandedPoint) string {
 }
 
 // These are interspersed to display connections. They don't actually belong to the maze
-func isConnectionPoint(p ExpandedPoint) bool {
+func isConnection(p ExpandedPoint) bool {
   return (p.X != 0 && p.X%2 == 0) || (p.Y != 0 && p.Y%2 == 0)
 }
 
-func (m Maze) connectionPointView(p ExpandedPoint) string {
-  if !isConnectionPoint(p) {
+var horizontalDirections []direction.Direction = []direction.Direction { direction.West, direction.East }
+var verticalDirections []direction.Direction = []direction.Direction { direction.North, direction.South }
+func (m Maze) connectionView(p ExpandedPoint) string {
+  if !isConnection(p) {
     panic(fmt.Sprintf("Called `connectionPointView` on %v, which is not a connection point", p))
   }
 
   if p.X%2 == 0 && p.Y%2 == 0 {
     // Always just a wall
     return "#"
-  } else if p.X % 2 == 0 && m.isOpenInDirections(p, []direction.Direction { direction.West, direction.East }){
+  } else if p.X % 2 == 0 && m.isOpenInDirections(p, horizontalDirections){
     return " "
-  } else if p.Y % 2 == 0  && m.isOpenInDirections(p, []direction.Direction { direction.North, direction.South }){
+  } else if p.Y % 2 == 0  && m.isOpenInDirections(p, verticalDirections){
     return " "
   }
 
