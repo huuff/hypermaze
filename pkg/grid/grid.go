@@ -5,6 +5,10 @@ type Point struct {
   Y int
 }
 
+func (p Point) Equals(o Point) bool {
+  return p.X == o.X && p.Y == o.Y
+}
+
 type Grid struct {
   Height int
   Width int

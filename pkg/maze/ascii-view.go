@@ -9,7 +9,6 @@ import (
 	"xyz.haff/maze/pkg/direction"
 )
 
-// TODO: Print entrance and exit
 func (m Maze) AsciiView() string {
   var buf bytes.Buffer
 
@@ -17,7 +16,7 @@ func (m Maze) AsciiView() string {
     for x := range lo.Range((m.Grid.Width * 2) + 1) {
       p := grid.Point { x, y }
       if isExteriorPoint(m.Grid, p) {
-        buf.WriteString("#")
+        buf.WriteString(m.exteriorPointView(p))
       } else if isConnectionPoint(p) {
         if m.isOpen(p) {
           buf.WriteString(" ")
@@ -41,6 +40,39 @@ func (m Maze) AsciiView() string {
 // These are the outermost points created only for showing exterior walls and displaying the exit, they can't have any other connections
 func isExteriorPoint(g grid.Grid, p grid.Point) bool {
   return p.X == 0  || p.Y == 0 || p.X == g.Width*2 || p.Y == g.Height*2
+}
+
+func (m Maze) exteriorPointView(p grid.Point) string {
+  if p.X%2==0 && p.Y%2==0 {
+    return "#"
+  }
+
+  unexpanded := unexpandedPoint(p)
+
+  isLeftBoundary := unexpanded.X == 0
+  isRightBoundary := unexpanded.X == m.Grid.Width-1
+  isTopBoundary := unexpanded.Y == 0
+  isBottomBoundary := unexpanded.Y == m.Grid.Height-1
+
+  var expectedDirection direction.Direction
+  switch {
+    case isLeftBoundary:
+      expectedDirection = direction.West
+    case isRightBoundary:
+      expectedDirection = direction.East
+    case isTopBoundary:
+      expectedDirection = direction.North
+    case isBottomBoundary:
+      expectedDirection = direction.South
+  }
+  
+  if m.Entrance.Location.Equals(unexpanded) && m.Entrance.Direction == expectedDirection {
+    return "a"
+  } else if m.Exit.Location.Equals(unexpanded) && m.Exit.Direction == expectedDirection {
+    return "e"
+  } else {
+    return "#"
+  }
 }
 
 // These are interspersed to display connections. They don't actually belong to the maze
