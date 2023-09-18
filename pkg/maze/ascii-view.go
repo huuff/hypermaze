@@ -9,20 +9,31 @@ import (
 	"xyz.haff/maze/pkg/direction"
 )
 
+type ExpandedPoint grid.Point
+func (p ExpandedPoint) AsPoint() grid.Point {
+  return grid.Point {
+    X: p.X,
+    Y: p.Y,
+  }
+}
+
+func AsExpanded(p grid.Point) ExpandedPoint {
+  return ExpandedPoint {
+    X: p.X,
+    Y: p.Y,
+  }
+}
+
 func (m Maze) AsciiView() string {
   var buf bytes.Buffer
 
   for y := range lo.Range((m.Grid.Height * 2) + 1) {
     for x := range lo.Range((m.Grid.Width * 2) + 1) {
-      p := grid.Point { x, y }
+      p := ExpandedPoint { x, y }
       if isExteriorPoint(m.Grid, p) {
         buf.WriteString(m.exteriorPointView(p))
       } else if isConnectionPoint(p) {
-        if m.isOpen(p) {
-          buf.WriteString(" ")
-        } else {
-          buf.WriteString("#")
-        }
+        buf.WriteString(m.connectionPointView(p))
       } else {
         buf.WriteString(" ")
       }
@@ -38,16 +49,16 @@ func (m Maze) AsciiView() string {
 }
 
 // These are the outermost points created only for showing exterior walls and displaying the exit, they can't have any other connections
-func isExteriorPoint(g grid.Grid, p grid.Point) bool {
+func isExteriorPoint(g grid.Grid, p ExpandedPoint) bool {
   return p.X == 0  || p.Y == 0 || p.X == g.Width*2 || p.Y == g.Height*2
 }
 
-func (m Maze) exteriorPointView(p grid.Point) string {
+func (m Maze) exteriorPointView(p ExpandedPoint) string {
   if p.X%2==0 && p.Y%2==0 {
     return "#"
   }
 
-  unexpanded := unexpandedPoint(p)
+  unexpanded := unexpand(p)
 
   isLeftBoundary := unexpanded.X == 0
   isRightBoundary := unexpanded.X == m.Grid.Width-1
@@ -76,32 +87,31 @@ func (m Maze) exteriorPointView(p grid.Point) string {
 }
 
 // These are interspersed to display connections. They don't actually belong to the maze
-func isConnectionPoint(p grid.Point) bool {
+func isConnectionPoint(p ExpandedPoint) bool {
   return (p.X != 0 && p.X%2 == 0) || (p.Y != 0 && p.Y%2 == 0)
 }
 
-
-func (m Maze) isOpen(p grid.Point) bool {
+func (m Maze) connectionPointView(p ExpandedPoint) string {
   if !isConnectionPoint(p) {
-    panic(fmt.Sprintf("Called `isOpen` on %v, which is not a connection point", p))
+    panic(fmt.Sprintf("Called `connectionPointView` on %v, which is not a connection point", p))
   }
 
   if p.X%2 == 0 && p.Y%2 == 0 {
     // Always just a wall
-    return false
+    return "#"
   } else if p.X % 2 == 0 && m.isOpenInDirections(p, []direction.Direction { direction.West, direction.East }){
-    return true
+    return " "
   } else if p.Y % 2 == 0  && m.isOpenInDirections(p, []direction.Direction { direction.North, direction.South }){
-    return true
+    return " "
   }
 
 
-  return false
+  return "#"
 }
 
-func (m Maze) isOpenInDirections(p grid.Point, directions []direction.Direction) bool {
+func (m Maze) isOpenInDirections(p ExpandedPoint, directions []direction.Direction) bool {
   for _, direction := range directions {
-    pointInDirection := unexpandedPoint(direction.From(p))
+    pointInDirection := unexpand(AsExpanded(direction.From(p.AsPoint())))
 
     roomInDirection, exists := m.Rooms[pointInDirection]
     if exists && roomInDirection.IsOpenTowards(direction.Inverse()) {
@@ -117,7 +127,7 @@ func (m Maze) isOpenInDirections(p grid.Point, directions []direction.Direction)
   in order to print it, this method returns the "unexpanded" point,
   which corresponds to the actual point in the map
 */
-func unexpandedPoint(p grid.Point) grid.Point {
+func unexpand(p ExpandedPoint) grid.Point {
   return grid.Point {
     X: (p.X-1)/2,
     Y: (p.Y-1)/2,
