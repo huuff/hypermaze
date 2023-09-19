@@ -38,6 +38,7 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
   }
 }
 
+// TODO: Make it able to return either a full-page or a fragment depending on the HX-Swap
 func (app application) maze(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
   level, err := strconv.Atoi(vars["level"])
@@ -56,6 +57,7 @@ func (app application) maze(w http.ResponseWriter, r *http.Request) {
 
   maze := app.mazes[level]
 
+  // TODO: maze-summary doesn't seem like a good name
   err = app.templates.partials.ExecuteTemplate(w, "maze-summary.html.gotmpl", map[string]any {
       "Level": level,
       "Minimap": ascii.View(*maze),
