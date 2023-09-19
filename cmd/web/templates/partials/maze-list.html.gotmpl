@@ -1,10 +1,12 @@
 <ul>
   {{ range $index, $maze := .Mazes }}
     <li class="relative">
-      <a href="#"  _="
-                      on mouseenter show next <div/>
-                      on mouseleave hide next <div/>
-                    "
+      <a hx-get="/mazes/{{$index}}"
+         hx-target="main"
+          _="
+              on mouseenter show next <div/>
+              on mouseleave hide next <div/>
+            "
       >Level {{ $index }}</a>
       <div 
         class="tooltip"

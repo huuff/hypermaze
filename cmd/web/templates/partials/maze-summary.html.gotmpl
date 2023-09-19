@@ -1,0 +1,10 @@
+<div>
+  <h1>Level {{ .Level }}</h1>
+  {{ template "minimap.html.gotmpl" . }}
+  <div>
+    <dl>
+      <dt>Height</dt> <dd>{{ .Maze.Grid.Height }}</dd>
+      <dt>Width</dt> <dd>{{ .Maze.Grid.Width }}</dd>
+    </dl>
+  </div>
+</div>
