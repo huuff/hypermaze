@@ -15,6 +15,7 @@ func (app application) index(w http.ResponseWriter, r *http.Request) {
 
   if err != nil {
     app.serverError(w, err)
+    return
   }
 }
 
@@ -23,6 +24,7 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
   level, err := strconv.Atoi(vars["level"])
   if err != nil {
     app.serverError(w, err)
+    return
   }
 
   err = app.templates.partials.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
