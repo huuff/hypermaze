@@ -1,14 +1,15 @@
 <ul>
   {{ range $index, $maze := .Mazes }}
-    <li x-data="{ show: false }" class="relative">
-      <a href="#" 
-        @mouseenter="show = true"
-        @mouseleave="show = false"
+    <li class="relative">
+      <a href="#"  _="
+                      on mouseenter show next <div/>
+                      on mouseleave hide next <div/>
+                    "
       >Level {{ $index }}</a>
-      <div
+      <div 
         class="tooltip"
-        x-show="show"
-        hx-get="/mazes/{{$index}}/minimap" 
+        style="display: none"
+        hx-get="/mazes/{{$index}}/minimap"
         hx-trigger="intersect once"
         hx-swap="afterbegin"
       >
