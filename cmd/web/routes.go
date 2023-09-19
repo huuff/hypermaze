@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -15,8 +14,7 @@ func (app application) index(w http.ResponseWriter, r *http.Request) {
   })
 
   if err != nil {
-    // TODO: Actual log for the error
-    fmt.Println(err.Error())
+    app.serverError(w, err)
   }
 }
 
@@ -24,8 +22,7 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
   level, err := strconv.Atoi(vars["level"])
   if err != nil {
-    // TODO: Actual log for the error
-    fmt.Println(err.Error())
+    app.serverError(w, err)
   }
 
   err = app.templates.partials.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
@@ -33,8 +30,8 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
   })
 
   if err != nil {
-    // TODO: Actual log for the error
-    fmt.Println(err.Error())
+    app.serverError(w, err)
+    return
   }
 }
 
@@ -44,8 +41,7 @@ func (app application) maze(w http.ResponseWriter, r *http.Request) {
   level, err := strconv.Atoi(vars["level"])
 
   if err != nil {
-    // TODO: Actual log for the error
-    fmt.Println(err.Error())
+    app.serverError(w, err)
     return
   }
 
@@ -65,8 +61,8 @@ func (app application) maze(w http.ResponseWriter, r *http.Request) {
   })
 
   if err != nil {
-    // TODO: Actual log for the error
-    fmt.Println(err.Error())
+    app.serverError(w, err)
+    return
   }
 }
 
