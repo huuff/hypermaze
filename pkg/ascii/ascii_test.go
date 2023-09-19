@@ -1,4 +1,4 @@
-package maze
+package ascii
 
 import (
 	"strings"
@@ -6,6 +6,7 @@ import (
 
 	"xyz.haff/maze/pkg/boundary"
 	"xyz.haff/maze/pkg/direction"
+	"xyz.haff/maze/pkg/maze"
 	"xyz.haff/maze/pkg/grid"
 )
 
@@ -13,10 +14,10 @@ func point(x, y int) grid.Point {
   return grid.Point { x, y }
 }
 
-func fakeRoom(x, y int) *Room {
-  return &Room {
+func fakeRoom(x, y int) *maze.Room {
+  return &maze.Room {
     Location: point(x, y), 
-    Connections: map[direction.Direction]*Room{},
+    Connections: map[direction.Direction]*maze.Room{},
   }
 }
 
@@ -32,9 +33,9 @@ func TestAsciiView(t *testing.T) {
   midCenterRoom.Connections[direction.East] = midRightRoom
   midRightRoom.Connections[direction.West] = midLeftRoom
 
-  maze := Maze {
+  maze := maze.Maze {
     Grid: grid.Grid { Height: 3, Width: 3 },
-    Rooms: map[grid.Point]*Room {
+    Rooms: map[grid.Point]*maze.Room {
       point(0, 0): fakeRoom(0, 0),
       point(1, 0): fakeRoom(1, 0),
       point(2, 0): fakeRoom(2, 0),
@@ -66,7 +67,7 @@ a     e
 `)
 
   // ACT
-  actual := maze.AsciiView()
+  actual := View(maze)
 
   // ASSERT
   if actual != expected {

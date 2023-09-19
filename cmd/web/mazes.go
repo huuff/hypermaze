@@ -12,6 +12,8 @@ const mazeAmount = 5
 
 var mazeSizes []int = []int { 3, 5, 7, 10, 12 }
 
+// TODO: Maybe just one function to generate a maze and call it several times?
+
 func generateMazes() []*maze.Maze {
   return lo.Map(mazeSizes, func(size, index int) *maze.Maze {
     grid := grid.Grid { Width: size, Height: size }

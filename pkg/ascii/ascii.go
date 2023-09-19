@@ -1,4 +1,4 @@
-package maze
+package ascii
 
 import (
 	"bytes"
@@ -7,33 +7,19 @@ import (
 	"github.com/samber/lo"
 	"xyz.haff/maze/pkg/grid"
 	"xyz.haff/maze/pkg/direction"
+	"xyz.haff/maze/pkg/maze"
 )
 
-type ExpandedPoint grid.Point
-func (p ExpandedPoint) AsPoint() grid.Point {
-  return grid.Point {
-    X: p.X,
-    Y: p.Y,
-  }
-}
-
-func AsExpanded(p grid.Point) ExpandedPoint {
-  return ExpandedPoint {
-    X: p.X,
-    Y: p.Y,
-  }
-}
-
-func (m Maze) AsciiView() string {
+func View(m maze.Maze) string {
   var buf bytes.Buffer
 
   for y := range lo.Range((m.Grid.Height * 2) + 1) {
     for x := range lo.Range((m.Grid.Width * 2) + 1) {
       p := ExpandedPoint { x, y }
       if isExterior(m.Grid, p) {
-        buf.WriteString(m.exteriorView(p))
+        buf.WriteString(exteriorView(m, p))
       } else if isConnection(p) {
-        buf.WriteString(m.connectionView(p))
+        buf.WriteString(connectionView(m, p))
       } else {
         buf.WriteString(" ")
       }
@@ -53,7 +39,7 @@ func isExterior(g grid.Grid, p ExpandedPoint) bool {
   return p.X == 0  || p.Y == 0 || p.X == g.Width*2 || p.Y == g.Height*2
 }
 
-func (m Maze) exteriorView(p ExpandedPoint) string {
+func exteriorView(m maze.Maze, p ExpandedPoint) string {
   if p.X%2==0 && p.Y%2==0 {
     return "#"
   }
@@ -93,7 +79,7 @@ func isConnection(p ExpandedPoint) bool {
 
 var horizontalDirections []direction.Direction = []direction.Direction { direction.West, direction.East }
 var verticalDirections []direction.Direction = []direction.Direction { direction.North, direction.South }
-func (m Maze) connectionView(p ExpandedPoint) string {
+func connectionView(m maze.Maze, p ExpandedPoint) string {
   if !isConnection(p) {
     panic(fmt.Sprintf("Called `connectionPointView` on %v, which is not a connection point", p))
   }
@@ -101,9 +87,9 @@ func (m Maze) connectionView(p ExpandedPoint) string {
   if p.X%2 == 0 && p.Y%2 == 0 {
     // Always just a wall
     return "#"
-  } else if p.X % 2 == 0 && m.isOpenInDirections(p, horizontalDirections){
+  } else if p.X % 2 == 0 && isOpenInDirections(m, p, horizontalDirections){
     return " "
-  } else if p.Y % 2 == 0  && m.isOpenInDirections(p, verticalDirections){
+  } else if p.Y % 2 == 0  && isOpenInDirections(m, p, verticalDirections){
     return " "
   }
 
@@ -111,7 +97,7 @@ func (m Maze) connectionView(p ExpandedPoint) string {
   return "#"
 }
 
-func (m Maze) isOpenInDirections(p ExpandedPoint, directions []direction.Direction) bool {
+func isOpenInDirections(m maze.Maze, p ExpandedPoint, directions []direction.Direction) bool {
   for _, direction := range directions {
     pointInDirection := unexpand(AsExpanded(direction.From(p.AsPoint())))
 
@@ -122,17 +108,5 @@ func (m Maze) isOpenInDirections(p ExpandedPoint, directions []direction.Directi
   }
 
   return false
-}
-
-/*
-  Since we expand the map (multiplying by 2 and adding 1 to sizes)
-  in order to print it, this method returns the "unexpanded" point,
-  which corresponds to the actual point in the map
-*/
-func unexpand(p ExpandedPoint) grid.Point {
-  return grid.Point {
-    X: (p.X-1)/2,
-    Y: (p.Y-1)/2,
-  }
 }
 

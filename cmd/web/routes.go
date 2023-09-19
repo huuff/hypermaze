@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"xyz.haff/maze/pkg/ascii"
 )
 
 func (app application) index(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +29,7 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
   }
 
   err = app.templates.partials.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
-    "Minimap": app.mazes[level].AsciiView(),
+    "Minimap": ascii.View(*app.mazes[level]),
   })
 
   if err != nil {
