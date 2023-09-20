@@ -37,7 +37,7 @@ func newTemplateCache() *templateCache {
     pagesCache[name] = ts
   }  
 
-  partials, err := template.ParseGlob("./cmd/web/templates/partials/*.html.gotmpl")
+  partials, err := template.ParseGlob("./cmd/web/templates/partials/*.gotmpl")
 
   if err != nil {
     panic(err)

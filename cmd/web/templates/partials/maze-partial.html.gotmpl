@@ -5,6 +5,8 @@
     <dl>
       <dt>Height</dt> <dd>{{ .Maze.Grid.Height }}</dd>
       <dt>Width</dt> <dd>{{ .Maze.Grid.Width }}</dd>
+      <dt>Entrance</dt> <dd>{{ template "coordinates.gotmpl" .Maze.Entrance.Location}}</dd>
+      <dt>Exit</dt> <dd>{{ template "coordinates.gotmpl" .Maze.Exit.Location}}</dd>
     </dl>
   </div>
 </div>
