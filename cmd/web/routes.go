@@ -55,8 +55,7 @@ func (app application) maze(w http.ResponseWriter, r *http.Request) {
 
   maze := app.mazes[level]
 
-  // TODO: maze-summary doesn't seem like a good name
-  err = app.templates.partials.ExecuteTemplate(w, "maze-summary.html.gotmpl", map[string]any {
+  err = app.templates.partials.ExecuteTemplate(w, "maze.html.gotmpl", map[string]any {
       "Level": level,
       "Minimap": ascii.View(*maze),
       "Maze": maze,
