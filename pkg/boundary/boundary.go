@@ -21,8 +21,8 @@ func FindAll(g grid.Grid) []Boundary {
   }
 
   for y := range lo.Range(g.Height) {
-    result = append(result, Boundary { grid.Point { 0, y }, direction.North})
-    result = append(result, Boundary { grid.Point { g.Width-1, y }, direction.South})
+    result = append(result, Boundary { grid.Point { 0, y }, direction.West})
+    result = append(result, Boundary { grid.Point { g.Width-1, y }, direction.East})
   }
 
   return result
