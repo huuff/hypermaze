@@ -15,7 +15,7 @@ func View(m maze.Maze) string {
 
   for y := range lo.Range((m.Grid.Height * 2) + 1) {
     for x := range lo.Range((m.Grid.Width * 2) + 1) {
-      p := ExpandedPoint { x, y }
+      p := expandedPoint { x, y }
       if isExterior(m.Grid, p) {
         buf.WriteString(exteriorView(m, p))
       } else if isConnection(p) {
@@ -35,11 +35,11 @@ func View(m maze.Maze) string {
 }
 
 // These are the outermost points created only for showing exterior walls and displaying the exit, they can't have any other connections
-func isExterior(g grid.Grid, p ExpandedPoint) bool {
+func isExterior(g grid.Grid, p expandedPoint) bool {
   return p.X == 0  || p.Y == 0 || p.X == g.Width*2 || p.Y == g.Height*2
 }
 
-func exteriorView(m maze.Maze, p ExpandedPoint) string {
+func exteriorView(m maze.Maze, p expandedPoint) string {
   if p.X%2==0 && p.Y%2==0 {
     return "#"
   }
@@ -73,13 +73,13 @@ func exteriorView(m maze.Maze, p ExpandedPoint) string {
 }
 
 // These are interspersed to display connections. They don't actually belong to the maze
-func isConnection(p ExpandedPoint) bool {
+func isConnection(p expandedPoint) bool {
   return (p.X != 0 && p.X%2 == 0) || (p.Y != 0 && p.Y%2 == 0)
 }
 
 var horizontalDirections []direction.Direction = []direction.Direction { direction.West, direction.East }
 var verticalDirections []direction.Direction = []direction.Direction { direction.North, direction.South }
-func connectionView(m maze.Maze, p ExpandedPoint) string {
+func connectionView(m maze.Maze, p expandedPoint) string {
   if !isConnection(p) {
     panic(fmt.Sprintf("Called `connectionPointView` on %v, which is not a connection point", p))
   }
@@ -97,9 +97,9 @@ func connectionView(m maze.Maze, p ExpandedPoint) string {
   return "#"
 }
 
-func isOpenInDirections(m maze.Maze, p ExpandedPoint, directions []direction.Direction) bool {
+func isOpenInDirections(m maze.Maze, p expandedPoint, directions []direction.Direction) bool {
   for _, direction := range directions {
-    pointInDirection := unexpand(AsExpanded(direction.From(p.AsPoint())))
+    pointInDirection := unexpand(asExpanded(direction.From(p.asPoint())))
 
     roomInDirection, exists := m.Rooms[pointInDirection]
     if exists && roomInDirection.IsOpenTowards(direction.Inverse()) {
