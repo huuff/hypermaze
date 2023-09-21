@@ -38,3 +38,8 @@ func (app application) badRequest(w http.ResponseWriter, err error) {
   w.WriteHeader(http.StatusBadRequest)
   w.Write([]byte(http.StatusText(http.StatusBadRequest)))
 }
+
+func (app application) notFound(w http.ResponseWriter) {
+  w.WriteHeader(http.StatusNotFound)
+  w.Write([]byte(http.StatusText(http.StatusNotFound)))
+}

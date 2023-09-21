@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"xyz.haff/maze/pkg/ascii"
+	"xyz.haff/maze/pkg/grid"
 )
 
 func (app application) index(w http.ResponseWriter, r *http.Request) {
@@ -76,25 +77,44 @@ func (app application) maze(w http.ResponseWriter, r *http.Request) {
 func (app application) room(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
   level, err := strconv.Atoi(vars["level"])
-  
+
   if err != nil {
     app.badRequest(w, err)
     return
   }
 
+  if level >= len(app.mazes) {
+    app.notFound(w)
+    return
+  }
+
+  maze := app.mazes[level]
+
   roomX, err := strconv.Atoi(vars["x"])
 
   if err != nil {
     app.badRequest(w, err)
+    return
   }
 
   roomY, err := strconv.Atoi(vars["y"])
 
   if err != nil {
     app.badRequest(w, err)
+    return
   }
 
-  fmt.Printf("(%d): (%d, %d)", level, roomX, roomY)
+  point := grid.Point { X: roomX, Y: roomY }
+  room, ok := maze.Rooms[point]
+
+  if !ok {
+    app.notFound(w) 
+    return
+  }
+
+  // TODO: Render it
+  fmt.Println(room.Location)
+
 }
 
 func (app application) routes() http.Handler {
