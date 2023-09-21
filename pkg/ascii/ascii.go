@@ -46,10 +46,10 @@ func exteriorView(m maze.Maze, p expandedPoint) string {
 
   unexpanded := unexpand(p)
 
-  isLeftBoundary := unexpanded.X == 0
-  isRightBoundary := unexpanded.X == m.Grid.Width-1
-  isTopBoundary := unexpanded.Y == 0
-  isBottomBoundary := unexpanded.Y == m.Grid.Height-1
+  isLeftBoundary := p.X == 0
+  isRightBoundary := p.X == (m.Grid.Width*2)
+  isTopBoundary := p.Y == 0
+  isBottomBoundary := p.Y == (m.Grid.Height*2)
 
   var expectedDirection direction.Direction
   switch {
