@@ -22,7 +22,7 @@ func newTemplateCache() *templateCache {
   for _, page := range pages {
     name := filepath.Base(page)
 
-    ts, err := template.New(name).ParseGlob("./cmd/web/templates/partials/*.html.gotmpl")
+    ts, err := template.New(name).ParseGlob("./cmd/web/templates/partials/*.gotmpl")
 
     if err != nil {
       panic(err)
