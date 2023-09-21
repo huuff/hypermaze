@@ -32,3 +32,9 @@ func (app application) serverError(w http.ResponseWriter, err error) {
   w.WriteHeader(http.StatusInternalServerError)
   w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 }
+
+func (app application) badRequest(w http.ResponseWriter, err error) {
+  app.errorLog.Println(err)
+  w.WriteHeader(http.StatusBadRequest)
+  w.Write([]byte(http.StatusText(http.StatusBadRequest)))
+}
