@@ -29,8 +29,15 @@ func (app application) minimap(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  if level >= len(app.mazes) {
+    app.notFound(w)
+    return
+  }
+
+  maze := app.mazes[level]
+
   err = app.templates.partials.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
-    "Minimap": ascii.View(*app.mazes[level]),
+    "Minimap": ascii.View(*maze),
   })
 
   if err != nil {
