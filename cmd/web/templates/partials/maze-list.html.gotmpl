@@ -1,6 +1,6 @@
 <ul>
   {{ range $index, $maze := .Mazes }}
-    <li class="relative">
+    <li>
       <a 
          hx-get="/mazes/{{$index}}"
          hx-push-url="true"
@@ -8,6 +8,9 @@
           _="
               on mouseenter show next .tooltip
               on mouseleave hide next .tooltip
+              on mousemove(clientX, clientY)
+                set (next .tooltip)'s style.left to `${clientX}px`
+                then set (next .tooltip)'s style.top to `${clientY}`px
               on click hide next .tooltip
             "
       >Level {{ $index }}</a>

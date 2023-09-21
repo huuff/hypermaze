@@ -19,8 +19,6 @@ pre {
   position: absolute;
   background-color: white;
   z-index: 10;
-  transform: translateX(+50%);
-
 }
 
 dl {
