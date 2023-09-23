@@ -23,6 +23,7 @@ func fakeRoom(x, y int) *maze.Room {
 
 // TODO: Add another test with some vertical passages
 // TODO: Add another with entrances/exits at the corners
+// TODO: Add a test with a highlight
 func TestAsciiView(t *testing.T) {
   // ARRANGE
   midLeftRoom := fakeRoom(0, 1)
@@ -68,7 +69,7 @@ a     e
 `)
 
   // ACT
-  actual := View(maze)
+  actual := View(maze, nil)
 
   // ASSERT
   if actual != expected {

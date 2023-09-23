@@ -30,7 +30,7 @@ func (app application) minimap(c *gin.Context) {
   maze := app.mazes[level]
 
   c.HTML(http.StatusOK, "minimap.html.gotmpl", gin.H {
-    "Minimap": ascii.View(*maze),
+    "Minimap": ascii.View(*maze, nil),
   })
 }
 
@@ -51,7 +51,7 @@ func (app application) maze(c *gin.Context) {
 
   data := gin.H {
     "Level": level,
-    "Minimap": ascii.View(*maze),
+    "Minimap": ascii.View(*maze, nil),
     "Maze": maze,
   }
 

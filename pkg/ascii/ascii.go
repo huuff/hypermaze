@@ -10,7 +10,7 @@ import (
 	"xyz.haff/maze/pkg/maze"
 )
 
-func View(m maze.Maze) string {
+func View(m maze.Maze, highlight *grid.Point) string {
   var buf bytes.Buffer
 
   for y := range lo.Range((m.Grid.Height * 2) + 1) {
@@ -20,8 +20,12 @@ func View(m maze.Maze) string {
         buf.WriteString(exteriorView(m, p))
       } else if isConnection(p) {
         buf.WriteString(connectionView(m, p))
-      } else {
-        buf.WriteString(" ")
+      } else { // It's a room
+        if highlight != nil && unexpand(p).Equals(*highlight) {
+          buf.WriteString("@")
+        } else {
+          buf.WriteString(" ")
+        }
       }
     }
 
