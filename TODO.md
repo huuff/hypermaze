@@ -3,6 +3,7 @@
 * Try to position the room controls in a way that represents the direction they point at (maybe even add arrows?)
 * Allow moving through the maze with keyboard arrows
 * Maybe allow closing the minimap?
+* Full and partial room version
 * Actually exiting the maze
 * Showing whether it's an entrance in the room
 * Implement JSON+HAL
