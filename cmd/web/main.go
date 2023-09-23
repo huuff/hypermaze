@@ -8,7 +8,7 @@ func main() {
   app := newApplication()
 
   r := gin.Default()
-  r.HTMLRender = newRenderer()
+  r.LoadHTMLGlob("templates/**/*")
   app.initRouter(r)
 
   r.Run()

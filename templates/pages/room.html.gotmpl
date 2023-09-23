@@ -1,7 +1,9 @@
-{{ define "content" }}
-  <main>
-    {{ template "room-partial.html.gotmpl" . }}
-  </main>
-{{ end }}
-
-{{ template "base.html.gotmpl" . }}
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "head.html.gotmpl" . }}
+  <body>
+    <main>
+      {{ template "room-partial.html.gotmpl" . }}
+    </main>
+  </body>
+</html>

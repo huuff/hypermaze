@@ -58,7 +58,7 @@ func (app application) maze(c *gin.Context) {
   if c.GetHeader("HX-Request") == "" {
     c.HTML(http.StatusOK, "maze.html.gotmpl", data)
   } else {
-    c.HTML(http.StatusOK, "maze-partial.html.gotmpl", data)
+    c.HTML(http.StatusOK, "partials/maze-partial.html.gotmpl", data)
   }
 }
 
@@ -99,7 +99,7 @@ func (app application) room(c *gin.Context) {
     return
   }
 
-  c.HTML(http.StatusOK, "room-partial.html.gotmpl", gin.H {
+  c.HTML(http.StatusOK, "partials/room-partial.html.gotmpl", gin.H {
     "Room": room,
   })
 }
