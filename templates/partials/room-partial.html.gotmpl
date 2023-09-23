@@ -1,25 +1,26 @@
-<div>
-  You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span>
-
+<div id="room-view">
+  <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span><p>
   <ul>
   {{ range $direction, $room := .Room.Connections }}
     <li>
       <a 
         hx-get="/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}"
-        hx-target="main"
+        hx-target="#room-view"
+        hx-select="#room-view"
         hx-push-url="true"
         _="on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to body"
       >
       Go {{ directionToString $direction }}</a>
     </li>
   {{ end }}
-
-  <button type="button"
-    hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
-    hx-target="aside"
-    hx-swap="innerHTML"
-  >
-    Open minimap
-  </button>
   </ul>
 </div>
+
+<button type="button"
+  hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
+  hx-target="aside"
+  hx-swap="innerHTML"
+  _="on click remove me"
+>
+  Open minimap
+</button>
