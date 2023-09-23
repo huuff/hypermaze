@@ -71,9 +71,9 @@ type RoomUri struct {
   Y int `uri:"y"`
 }
 
-func (app application) findRoom(roomUri RoomUri) (*maze.Room, error) {
+func (app application) findRoom(roomUri RoomUri) (*maze.Maze, *maze.Room, error) {
   if roomUri.Level >= len(app.mazes) {
-    return nil, errors.New(fmt.Sprintf("Level %d does not exist", roomUri.Level))
+    return nil, nil, errors.New(fmt.Sprintf("Level %d does not exist", roomUri.Level))
   } 
 
   maze := app.mazes[roomUri.Level]
@@ -82,10 +82,10 @@ func (app application) findRoom(roomUri RoomUri) (*maze.Room, error) {
 
   room, ok := maze.Rooms[location]
   if !ok {
-    return nil, errors.New(fmt.Sprintf("Room %v not found on level %d", location, roomUri.Level))
+    return maze, nil, errors.New(fmt.Sprintf("Room %v not found on level %d", location, roomUri.Level))
   }
 
-  return room, nil
+  return maze, room, nil
 }
 
 func (app application) room(c *gin.Context) {
@@ -95,7 +95,7 @@ func (app application) room(c *gin.Context) {
     return
   }
 
-  room, err := app.findRoom(params)
+  _, room, err := app.findRoom(params)
   if err != nil {
     c.String(http.StatusNotFound, err.Error())
     return
@@ -107,9 +107,22 @@ func (app application) room(c *gin.Context) {
   })
 }
 
-//func (app application) roomMinimap(c *gin.Context) {
-  
-//}
+func (app application) roomMinimap(c *gin.Context) {
+  var params RoomUri
+  if err := c.ShouldBindUri(&params); err != nil {
+    c.String(http.StatusBadRequest, err.Error())
+  }
+
+  maze, room, err := app.findRoom(params)
+  if err != nil {
+    c.String(http.StatusNotFound, err.Error())
+    return
+  }
+
+  c.HTML(http.StatusOK, "minimap.html.gotmpl", gin.H {
+    "Minimap": ascii.View(*maze, &room.Location),
+  })
+}
 
 func (app application) initRouter(router *gin.Engine) http.Handler {
   router.GET("/", app.index)
@@ -117,7 +130,7 @@ func (app application) initRouter(router *gin.Engine) http.Handler {
   router.GET("/mazes/:level", app.maze)
   // TODO: I'd like to have :x,:y but gin-gonic doesn't allow it... what do I do?
   router.GET("/mazes/:level/room/:x/:y", app.room)
-  //router.GET("/mazes/:level/room/:x/:y/minimap", app.roomMinimap)
+  router.GET("/mazes/:level/room/:x/:y/minimap", app.roomMinimap)
 
   router.Static("/static", "./static")
   

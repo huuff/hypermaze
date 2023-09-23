@@ -12,5 +12,13 @@
       Go {{ directionToString $direction }}</a>
     </li>
   {{ end }}
+
+  <button type="button"
+    hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
+    hx-target="aside"
+    hx-swap="innerHTML"
+  >
+    Open minimap
+  </button>
   </ul>
 </div>
