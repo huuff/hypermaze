@@ -1,22 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
   app := newApplication()
 
-  port := "8080"
+  r := gin.Default()
+  r.HTMLRender = newRenderer()
+  app.initRouter(r)
 
-  server := http.Server {
-    Addr: ":" + port,
-    Handler: app.routes(),
-  }
-
-  fmt.Printf("Starting server on port %s\n", port)
-  if err := server.ListenAndServe(); err != nil {
-    panic(err)
-  }
+  r.Run()
 }
