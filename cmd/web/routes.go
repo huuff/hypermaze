@@ -62,36 +62,27 @@ func (app application) maze(c *gin.Context) {
   }
 }
 
-func (app application) room(c *gin.Context) {
-  level, err := strconv.Atoi(c.Param("level"))
+type RoomUri struct {
+  Level int `uri:"level"`
+  X int `uri:"x"`
+  Y int `uri:"y"`
+}
 
-  if err != nil {
+func (app application) room(c *gin.Context) {
+  var params RoomUri
+  if err := c.ShouldBindUri(&params); err != nil {
     c.String(http.StatusBadRequest, err.Error())
     return
   }
 
-  if level >= len(app.mazes) {
+  if params.Level >= len(app.mazes) {
     c.String(http.StatusNotFound, "")
     return
   }
 
-  maze := app.mazes[level]
+  maze := app.mazes[params.Level]
 
-  roomX, err := strconv.Atoi(c.Param("x"))
-
-  if err != nil {
-    c.String(http.StatusBadRequest, err.Error())
-    return
-  }
-
-  roomY, err := strconv.Atoi(c.Param("y"))
-
-  if err != nil {
-    c.String(http.StatusBadRequest, err.Error())
-    return
-  }
-
-  point := grid.Point { X: roomX, Y: roomY }
+  point := grid.Point { X: params.X, Y: params.Y }
   room, ok := maze.Rooms[point]
 
   if !ok {
@@ -101,9 +92,13 @@ func (app application) room(c *gin.Context) {
 
   c.HTML(http.StatusOK, "room-partial.html.gotmpl", gin.H {
     "Room": room,
-    "Level": level,
+    "Level": params.Level,
   })
 }
+
+//func (app application) roomMinimap(c *gin.Context) {
+  
+//}
 
 func (app application) initRouter(router *gin.Engine) http.Handler {
   router.GET("/", app.index)
@@ -111,6 +106,7 @@ func (app application) initRouter(router *gin.Engine) http.Handler {
   router.GET("/mazes/:level", app.maze)
   // TODO: I'd like to have :x,:y but gin-gonic doesn't allow it... what do I do?
   router.GET("/mazes/:level/room/:x/:y", app.room)
+  //router.GET("/mazes/:level/room/:x/:y/minimap", app.roomMinimap)
 
   router.Static("/static", "./static")
   
