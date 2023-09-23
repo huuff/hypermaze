@@ -1,5 +1,4 @@
 # Tasks
-* Rename "minimap" to "ascii" everywhere
 * Actually exiting the maze
 * Showing whether it's an entrance in the room
 * Implement JSON+HAL

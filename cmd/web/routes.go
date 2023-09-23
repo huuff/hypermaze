@@ -18,7 +18,7 @@ func (app application) index(c *gin.Context) {
   })
 }
 
-func (app application) minimap(c *gin.Context) {
+func (app application) mazeAscii(c *gin.Context) {
   level, err := strconv.Atoi(c.Param("level"))
   if err != nil {
     c.String(http.StatusBadRequest, err.Error())
@@ -32,8 +32,8 @@ func (app application) minimap(c *gin.Context) {
 
   maze := app.mazes[level]
 
-  c.HTML(http.StatusOK, "minimap.html.gotmpl", gin.H {
-    "Minimap": ascii.View(*maze, nil),
+  c.HTML(http.StatusOK, "maze-ascii-view.html.gotmpl", gin.H {
+    "View": ascii.View(*maze, nil),
   })
 }
 
@@ -54,7 +54,7 @@ func (app application) maze(c *gin.Context) {
 
   data := gin.H {
     "Level": level,
-    "Minimap": ascii.View(*maze, nil),
+    "View": ascii.View(*maze, nil),
     "Maze": maze,
   }
 
@@ -107,7 +107,7 @@ func (app application) room(c *gin.Context) {
   })
 }
 
-func (app application) roomMinimap(c *gin.Context) {
+func (app application) minimap(c *gin.Context) {
   var params RoomUri
   if err := c.ShouldBindUri(&params); err != nil {
     c.String(http.StatusBadRequest, err.Error())
@@ -119,18 +119,18 @@ func (app application) roomMinimap(c *gin.Context) {
     return
   }
 
-  c.HTML(http.StatusOK, "minimap.html.gotmpl", gin.H {
-    "Minimap": ascii.View(*maze, &room.Location),
+  c.HTML(http.StatusOK, "maze-ascii-view.html.gotmpl", gin.H {
+    "View": ascii.View(*maze, &room.Location),
   })
 }
 
 func (app application) initRouter(router *gin.Engine) http.Handler {
   router.GET("/", app.index)
-  router.GET("/mazes/:level/minimap", app.minimap)
+  router.GET("/mazes/:level/ascii", app.mazeAscii)
   router.GET("/mazes/:level", app.maze)
   // TODO: I'd like to have :x,:y but gin-gonic doesn't allow it... what do I do?
   router.GET("/mazes/:level/room/:x/:y", app.room)
-  router.GET("/mazes/:level/room/:x/:y/minimap", app.roomMinimap)
+  router.GET("/mazes/:level/room/:x/:y/minimap", app.minimap)
 
   router.Static("/static", "./static")
   
