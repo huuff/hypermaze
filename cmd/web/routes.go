@@ -1,113 +1,93 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
 	"xyz.haff/maze/pkg/ascii"
 	"xyz.haff/maze/pkg/grid"
+  "github.com/gin-gonic/gin"
 )
 
-func (app application) index(w http.ResponseWriter, r *http.Request) {
-  err := app.templates.pages["index.html.gotmpl"].Execute(w, map[string]any {
+func (app application) index(c *gin.Context) {
+  c.HTML(http.StatusOK, "index.html.gotmpl", gin.H {
     "Mazes": app.mazes,
   })
-
-  if err != nil {
-    app.serverError(w, err)
-    return
-  }
 }
 
-func (app application) minimap(w http.ResponseWriter, r *http.Request) {
-  vars := mux.Vars(r)
-  level, err := strconv.Atoi(vars["level"])
+func (app application) minimap(c *gin.Context) {
+  level, err := strconv.Atoi(c.Param("level"))
   if err != nil {
-    app.badRequest(w, err)
+    c.String(http.StatusBadRequest, err.Error())
     return
   }
 
   if level >= len(app.mazes) {
-    app.notFound(w)
+    c.String(http.StatusNotFound, "")
     return
   }
 
   maze := app.mazes[level]
 
-  err = app.templates.partials.ExecuteTemplate(w, "minimap.html.gotmpl", map[string]any {
+  c.HTML(http.StatusOK, "minimap.html.gotmpl", gin.H {
     "Minimap": ascii.View(*maze),
   })
-
-  if err != nil {
-    app.serverError(w, err)
-    return
-  }
 }
 
-func (app application) maze(w http.ResponseWriter, r *http.Request) {
-  vars := mux.Vars(r)
-  level, err := strconv.Atoi(vars["level"])
+func (app application) maze(c *gin.Context) {
+  level, err := strconv.Atoi(c.Param("level"))
 
   if err != nil {
-    app.badRequest(w, err)
+    c.String(http.StatusBadRequest, err.Error())
     return
   }
 
   if level >= len(app.mazes) {
-    w.WriteHeader(http.StatusNotFound)
-    w.Write([]byte(http.StatusText(http.StatusNotFound)))
+    c.String(http.StatusNotFound, "")
     return
   }
 
   maze := app.mazes[level]
 
-  data := map[string]any {
+  data := gin.H {
     "Level": level,
     "Minimap": ascii.View(*maze),
     "Maze": maze,
   }
 
-  if r.Header.Get("HX-Request") == "" {
-    err = app.templates.pages["maze.html.gotmpl"].Execute(w, data)
+  if c.GetHeader("HX-Request") == "" {
+    c.HTML(http.StatusOK, "maze.html.gotmpl", data)
   } else {
-    err = app.templates.partials.ExecuteTemplate(w, "maze-partial.html.gotmpl", data)
-  }
-
-  if err != nil {
-    app.serverError(w, err)
-    return
+    c.HTML(http.StatusOK, "maze-partial.html.gotmpl", data)
   }
 }
 
-func (app application) room(w http.ResponseWriter, r *http.Request) {
-  vars := mux.Vars(r)
-  level, err := strconv.Atoi(vars["level"])
+func (app application) room(c *gin.Context) {
+  level, err := strconv.Atoi(c.Param("level"))
 
   if err != nil {
-    app.badRequest(w, err)
+    c.String(http.StatusBadRequest, err.Error())
     return
   }
 
   if level >= len(app.mazes) {
-    app.notFound(w)
+    c.String(http.StatusNotFound, "")
     return
   }
 
   maze := app.mazes[level]
 
-  roomX, err := strconv.Atoi(vars["x"])
+  roomX, err := strconv.Atoi(c.Param("x"))
 
   if err != nil {
-    app.badRequest(w, err)
+    c.String(http.StatusBadRequest, err.Error())
     return
   }
 
-  roomY, err := strconv.Atoi(vars["y"])
+  roomY, err := strconv.Atoi(c.Param("y"))
 
   if err != nil {
-    app.badRequest(w, err)
+    c.String(http.StatusBadRequest, err.Error())
     return
   }
 
@@ -115,22 +95,23 @@ func (app application) room(w http.ResponseWriter, r *http.Request) {
   room, ok := maze.Rooms[point]
 
   if !ok {
-    app.notFound(w) 
+    c.String(http.StatusNotFound, "")
     return
   }
 
-  // TODO: Render it
-  fmt.Println(room.Location)
-
+  c.HTML(http.StatusOK, "room-partial.html.gotmpl", gin.H {
+    "Room": room,
+  })
 }
 
-func (app application) routes() http.Handler {
-  router := mux.NewRouter()
-  router.HandleFunc("/", app.index)
-  router.HandleFunc("/mazes/{level}/minimap", app.minimap)
-  router.HandleFunc("/mazes/{level}", app.maze)
-  router.HandleFunc("/mazes/{level}/room/{x},{y}", app.maze)
-  router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir("./static/"))))
+func (app application) initRouter(router *gin.Engine) http.Handler {
+  router.GET("/", app.index)
+  router.GET("/mazes/:level/minimap", app.minimap)
+  router.GET("/mazes/:level", app.maze)
+  // TODO: I'd like to have :x,:y but gin-gonic doesn't allow it... what do I do?
+  router.GET("/mazes/:level/room/:x/:y", app.maze)
+
+  router.Static("/static", "./static")
   
   return router
 }

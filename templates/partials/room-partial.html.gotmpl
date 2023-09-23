@@ -1,0 +1,7 @@
+<div>
+  You're at <span>{{ template "coordinates.gotmpl" }} .Room.Location</span>
+
+  {{ range $direction, $location := .Room.Connections }}
+    <a href="#">Go {{ $direction }}</a>
+  {{ end }}
+</div>
