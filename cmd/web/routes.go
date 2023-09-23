@@ -1,12 +1,15 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"xyz.haff/maze/pkg/ascii"
 	"xyz.haff/maze/pkg/grid"
-  "github.com/gin-gonic/gin"
+	"xyz.haff/maze/pkg/maze"
 )
 
 func (app application) index(c *gin.Context) {
@@ -68,6 +71,23 @@ type RoomUri struct {
   Y int `uri:"y"`
 }
 
+func (app application) findRoom(roomUri RoomUri) (*maze.Room, error) {
+  if roomUri.Level >= len(app.mazes) {
+    return nil, errors.New(fmt.Sprintf("Level %d does not exist", roomUri.Level))
+  } 
+
+  maze := app.mazes[roomUri.Level]
+
+  location := grid.Point { X: roomUri.X, Y: roomUri.Y}
+
+  room, ok := maze.Rooms[location]
+  if !ok {
+    return nil, errors.New(fmt.Sprintf("Room %v not found on level %d", location, roomUri.Level))
+  }
+
+  return room, nil
+}
+
 func (app application) room(c *gin.Context) {
   var params RoomUri
   if err := c.ShouldBindUri(&params); err != nil {
@@ -75,18 +95,9 @@ func (app application) room(c *gin.Context) {
     return
   }
 
-  if params.Level >= len(app.mazes) {
-    c.String(http.StatusNotFound, "")
-    return
-  }
-
-  maze := app.mazes[params.Level]
-
-  point := grid.Point { X: params.X, Y: params.Y }
-  room, ok := maze.Rooms[point]
-
-  if !ok {
-    c.String(http.StatusNotFound, "")
+  room, err := app.findRoom(params)
+  if err != nil {
+    c.String(http.StatusNotFound, err.Error())
     return
   }
 
