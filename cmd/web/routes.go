@@ -101,6 +101,7 @@ func (app application) room(c *gin.Context) {
 
   c.HTML(http.StatusOK, "room-partial.html.gotmpl", gin.H {
     "Room": room,
+    "Level": level,
   })
 }
 
@@ -109,7 +110,7 @@ func (app application) initRouter(router *gin.Engine) http.Handler {
   router.GET("/mazes/:level/minimap", app.minimap)
   router.GET("/mazes/:level", app.maze)
   // TODO: I'd like to have :x,:y but gin-gonic doesn't allow it... what do I do?
-  router.GET("/mazes/:level/room/:x/:y", app.maze)
+  router.GET("/mazes/:level/room/:x/:y", app.room)
 
   router.Static("/static", "./static")
   

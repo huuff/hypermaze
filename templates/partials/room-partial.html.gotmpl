@@ -1,7 +1,16 @@
 <div>
-  You're at <span>{{ template "coordinates.gotmpl" }} .Room.Location</span>
+  You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span>
 
-  {{ range $direction, $location := .Room.Connections }}
-    <a href="#">Go {{ $direction }}</a>
+  <ul>
+  {{ range $direction, $room := .Room.Connections }}
+    <li>
+      <a 
+        hx-get="/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}"
+        hx-target="main"
+        hx-push-url="true"
+      >
+      Go {{ $direction }}</a>
+    </li>
   {{ end }}
+  </ul>
 </div>
