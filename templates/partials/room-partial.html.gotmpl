@@ -8,6 +8,7 @@
         hx-get="/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}"
         hx-target="main"
         hx-push-url="true"
+        _="on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to body"
       >
       Go {{ directionToString $direction }}</a>
     </li>

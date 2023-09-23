@@ -101,7 +101,6 @@ func (app application) room(c *gin.Context) {
     return
   }
 
-  c.Header("HX-Trigger", "changedRoom")
   c.HTML(http.StatusOK, "room-partial.html.gotmpl", gin.H {
     "Room": room,
     "Level": params.Level,

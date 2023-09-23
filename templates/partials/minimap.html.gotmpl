@@ -1,7 +1,12 @@
 <div
-  hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
-  hx-trigger="changedRoom from:body"
-  hx-swap="outerHTML"
+  _="
+    on changedRoom(x, y) from body
+    call htmx.ajax(
+      'GET', 
+      `/mazes/{{ .Level }}/room/${x}/${y}/minimap`, 
+      { target: me, swap: 'outerHTML'}
+    )
+  "
 >
   {{ template "maze-ascii-view.html.gotmpl" . }}
 </div>
