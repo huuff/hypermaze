@@ -101,6 +101,7 @@ func (app application) room(c *gin.Context) {
     return
   }
 
+  c.Header("HX-Trigger", "changedRoom")
   c.HTML(http.StatusOK, "room-partial.html.gotmpl", gin.H {
     "Room": room,
     "Level": params.Level,
@@ -121,6 +122,8 @@ func (app application) minimap(c *gin.Context) {
 
   c.HTML(http.StatusOK, "maze-ascii-view.html.gotmpl", gin.H {
     "View": ascii.View(*maze, &room.Location),
+    "Level": params.Level,
+    "Room": room,
   })
 }
 

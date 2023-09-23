@@ -1,0 +1,6 @@
+<div
+  hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
+  hx-trigger="changedRoom from:body"
+  >
+  {{ template "maze-ascii-view.html.gotmpl" . }}
+</div>
