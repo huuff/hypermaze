@@ -10,4 +10,20 @@
   "
 >
   {{ template "maze-ascii-view.html.gotmpl" . }}
+
+  <button type="button"
+    _="
+      init set :x to {{ .Room.Location.X }} then set :y to {{ .Room.Location.Y }}
+      on changedRoom(x, y) set :x to x then set :y to y
+      on click
+        call htmx.ajax(
+          'GET',
+          `/mazes/{{ .Level }}/room/${:x}/${:y}`,
+          { target: 'main', swap: 'innerHTML'}
+        )
+    "
+  >
+    Close minimap
+  </button>
 </div>
+

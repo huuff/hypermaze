@@ -18,13 +18,25 @@
 
 <div id="minimap">
   <button type="button"
-    hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
-    hx-target="#minimap"
-    hx-swap="outerHTML"
+    _="
+    init set :x to {{ .Room.Location.X }} then set :y to {{ .Room.Location.Y }}
+    on changedRoom(x, y) from body set :x to x then set :y to y
+    on click
+      call htmx.ajax(
+        'GET',
+        `/mazes/{{ .Level }}/room/${:x}/${:y}/minimap`,
+        { target: '#minimap', swap: 'outerHTML'}
+      )
+    "
   >
     Open minimap
   </button>
 </div>
 
 
-<a href="/" hx-confirm="Are you sure you want to quit this maze?">Exit maze (Surrender)</a>
+<a 
+  href="/" 
+  hx-confirm="Are you sure you want to quit this maze?"
+  >
+  Exit maze (Surrender)
+</a>
