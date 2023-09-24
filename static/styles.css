@@ -26,3 +26,45 @@ dl {
   grid-template-columns: 1fr 1fr;
 }
 
+.move-controls {
+  display: grid;
+  grid-template:
+    "north north"
+    "west east"
+    "south south"
+    ;
+  width: 100%;
+}
+
+.north {
+  grid-area: north;
+  text-align: center;
+}
+
+.west {
+  grid-area: west;
+  text-align: left;
+}
+
+.east {
+  grid-area: east;
+  text-align: right;
+}
+
+.south {
+  grid-area: south;
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0 !important;
+}
+
+#room-view {
+  width: 250px;
+}
+
+#minimap {
+  width: 250px;
+}

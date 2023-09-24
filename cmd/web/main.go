@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"text/template"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func main() {
   r := gin.Default()
   r.SetFuncMap(template.FuncMap {
     "directionToString": directionToString,
+    "toLower": strings.ToLower,
   })
   r.LoadHTMLGlob("templates/**/*")
 
