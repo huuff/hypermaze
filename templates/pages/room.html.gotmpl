@@ -3,7 +3,52 @@
   {{ template "head.html.gotmpl" . }}
   <body hx-boost="true">
     <main>
-      {{ template "room-partial.html.gotmpl" . }}
+      <h1>Level {{ .Level }}</h1>
+      <div id="room-view">
+        <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span><p>
+        <ul class="move-controls">
+        {{ range $direction, $room := .Room.Connections }}
+          <li class="{{ $direction | directionToString | toLower }}">
+            <a 
+              hx-get="/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}"
+              hx-target="#room-view"
+              hx-select="#room-view"
+              hx-push-url="true"
+              _="
+                on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to body
+                on keyup[key == '{{ directionToKey $direction}}'] from body log '{{ directionToString $direction}}'
+              "
+            >
+            Go {{ directionToString $direction }}</a>
+          </li>
+        {{ end }}
+        </ul>
+      </div>
+
+      <div id="minimap">
+        <button type="button"
+          _="
+          init set :x to {{ .Room.Location.X }} then set :y to {{ .Room.Location.Y }}
+          on changedRoom(x, y) from body set :x to x then set :y to y
+          on click
+            call htmx.ajax(
+              'GET',
+              `/mazes/{{ .Level }}/room/${:x}/${:y}/minimap`,
+              { target: '#minimap', swap: 'outerHTML'}
+            )
+          "
+        >
+          Open minimap
+        </button>
+      </div>
+
+
+      <a 
+        href="/" 
+        hx-confirm="Are you sure you want to quit this maze?"
+        >
+        Give up
+      </a>
     </main>
   </body>
 </html>

@@ -10,11 +10,8 @@
         <dt>Entrance</dt> <dd>{{ template "coordinates.gotmpl" .Maze.Entrance.Location}} {{ .Maze.Entrance.Direction | directionToString }}</dd>
         <dt>Exit</dt> <dd>{{ template "coordinates.gotmpl" .Maze.Exit.Location}} {{ .Maze.Exit.Direction | directionToString }}</dd>
       </dl>
-      <button 
-        hx-get="/mazes/{{ .Level }}/room/{{ .Maze.Entrance.Location.X}}/{{ .Maze.Entrance.Location.Y }}"
-        hx-push-url="true"
-        hx-target="main"
-        type="button"
+      <a 
+        href="/mazes/{{ .Level }}/room/{{ .Maze.Entrance.Location.X}}/{{ .Maze.Entrance.Location.Y }}"
       >
         Enter
       </button>

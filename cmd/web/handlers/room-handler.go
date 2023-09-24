@@ -5,7 +5,6 @@ import (
   "xyz.haff/maze/pkg/maze"
   "xyz.haff/maze/pkg/grid"
   "xyz.haff/maze/pkg/ascii"
-  "xyz.haff/maze/cmd/web/util"
   "errors"
   "fmt"
   "net/http"
@@ -39,11 +38,7 @@ func (handler RoomHandler) Room(c *gin.Context) {
     "Level": params.Level,
   }
   
-  if util.IsHxRequest(c) {
-    c.HTML(http.StatusOK, "room-partial.html.gotmpl", data)
-  } else {
-    c.HTML(http.StatusOK, "room.html.gotmpl", data)
-  }
+  c.HTML(http.StatusOK, "room.html.gotmpl", data)
 }
 
 func (handler RoomHandler) Minimap(c *gin.Context) {
