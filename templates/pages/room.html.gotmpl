@@ -15,7 +15,7 @@
               hx-select="#room-view"
               hx-push-url="true"
               _="
-                on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to body
+                on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to <main/>
                 on keyup[key == '{{ directionToKey $direction}}'] from body log '{{ directionToString $direction}}'
               "
             >
@@ -25,23 +25,28 @@
         </ul>
       </div>
 
-      <div id="minimap">
-        <button type="button"
-          _="
-          init set :x to {{ .Room.Location.X }} then set :y to {{ .Room.Location.Y }}
-          on changedRoom(x, y) from body set :x to x then set :y to y
-          on click
-            call htmx.ajax(
-              'GET',
-              `/mazes/{{ .Level }}/room/${:x}/${:y}/minimap`,
-              { target: '#minimap', swap: 'outerHTML'}
-            )
-          "
-        >
-          Open minimap
-        </button>
+      <div id="minimap"
+        _="
+          on changedRoom(x, y) from <main/> call htmx.ajax(
+            'GET',
+            `/mazes/{{ .Level }}/room/${x}/${y}/minimap`,
+            { swap: 'innerHTML', target: me }
+          )
+        "
+        hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
+        hx-trigger="load"
+        style="display: none"
+      >
       </div>
+      <p>TODO: Currently, we always load the minimap on every room change but that's wasteful, try to only load it if it's showing</p>
 
+      <button type="button"
+        _="
+          on click toggle the *display of #minimap
+        "
+      >
+        Toggle minimap (TODO: change this text depending on whether its open or closed)
+      </button>
 
       <a 
         href="/" 

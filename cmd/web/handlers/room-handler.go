@@ -53,7 +53,7 @@ func (handler RoomHandler) Minimap(c *gin.Context) {
     return
   }
 
-  c.HTML(http.StatusOK, "minimap.html.gotmpl", gin.H {
+  c.HTML(http.StatusOK, "maze-ascii-view.html.gotmpl", gin.H {
     "View": ascii.View(*maze, &room.Location),
     "Level": params.Level,
     "Room": room,
