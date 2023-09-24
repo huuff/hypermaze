@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"xyz.haff/maze/pkg/maze"
 	"xyz.haff/maze/pkg/ascii"
-  "xyz.haff/maze/cmd/web/util"
 )
 
 type MazeHandler struct {
@@ -54,9 +53,5 @@ func (handler MazeHandler) Maze(c *gin.Context) {
     "Maze": maze,
   }
 
-  if util.IsHxRequest(c) {
-    c.HTML(http.StatusOK, "maze-partial.html.gotmpl", data)
-  } else {
-    c.HTML(http.StatusOK, "maze.html.gotmpl", data)
-  }
+  c.HTML(http.StatusOK, "maze.html.gotmpl", data)
 }

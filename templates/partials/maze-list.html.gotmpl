@@ -2,9 +2,7 @@
   {{ range $index, $maze := .Mazes }}
     <li>
       <a 
-         hx-get="/mazes/{{$index}}"
-         hx-push-url="true"
-         hx-target="main"
+         href="/mazes/{{$index}}"
           _="
               on mouseenter show next .tooltip
               on mouseleave hide next .tooltip
