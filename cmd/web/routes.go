@@ -58,10 +58,10 @@ func (app application) maze(c *gin.Context) {
     "Maze": maze,
   }
 
-  if c.GetHeader("HX-Request") == "" {
-    c.HTML(http.StatusOK, "maze.html.gotmpl", data)
-  } else {
+  if isHxRequest(c) {
     c.HTML(http.StatusOK, "maze-partial.html.gotmpl", data)
+  } else {
+    c.HTML(http.StatusOK, "maze.html.gotmpl", data)
   }
 }
 
@@ -101,10 +101,16 @@ func (app application) room(c *gin.Context) {
     return
   }
 
-  c.HTML(http.StatusOK, "room-partial.html.gotmpl", gin.H {
+  data := gin.H {
     "Room": room,
     "Level": params.Level,
-  })
+  }
+  
+  if isHxRequest(c) {
+    c.HTML(http.StatusOK, "room-partial.html.gotmpl", data)
+  } else {
+    c.HTML(http.StatusOK, "room.html.gotmpl", data)
+  }
 }
 
 func (app application) minimap(c *gin.Context) {
