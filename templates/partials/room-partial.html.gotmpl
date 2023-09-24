@@ -8,7 +8,10 @@
         hx-target="#room-view"
         hx-select="#room-view"
         hx-push-url="true"
-        _="on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to body"
+        _="
+          on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to body
+          on keyup[key == '{{ directionToKey $direction}}'] from body log '{{ directionToString $direction}}'
+        "
       >
       Go {{ directionToString $direction }}</a>
     </li>

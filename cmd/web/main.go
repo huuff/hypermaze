@@ -5,6 +5,7 @@ import (
 	"text/template"
 
 	"github.com/gin-gonic/gin"
+	"xyz.haff/maze/cmd/web/util"
 )
 
 func main() {
@@ -12,8 +13,9 @@ func main() {
 
   r := gin.Default()
   r.SetFuncMap(template.FuncMap {
-    "directionToString": directionToString,
+    "directionToString": util.DirectionToString,
     "toLower": strings.ToLower,
+    "directionToKey": util.DirectionToKey,
   })
   r.LoadHTMLGlob("templates/**/*")
 
