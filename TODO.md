@@ -1,5 +1,6 @@
 # Tasks
 * Add a favicon?
+* Some `h1` titles in pages, maybe allow getting them with oob
 * Try to position the room controls in a way that represents the direction they point at (maybe even add arrows?)
 * Allow moving through the maze with keyboard arrows
 * Actually exiting the maze
