@@ -1,5 +1,5 @@
 # Tasks
-* Add a title
+* Add a favicon?
 * Try to position the room controls in a way that represents the direction they point at (maybe even add arrows?)
 * Allow moving through the maze with keyboard arrows
 * Full and partial room version
