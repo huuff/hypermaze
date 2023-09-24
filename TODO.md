@@ -1,6 +1,5 @@
 # Tasks
 * Add a favicon?
-* Some `h1` titles in pages, maybe allow getting them with oob
 * Allow moving through the maze with keyboard arrows. UPDATE: I've made some progress on this but haven't finished it yet, check the `on keyup` event handler for the `room-partial`
 * I should make the minimap a separate "component"
 * Actually exiting the maze
