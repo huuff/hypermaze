@@ -10,7 +10,13 @@
         hx-push-url="true"
         _="
           on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to <main/>
-          on keyup[key == '{{ directionToKey $direction}}'] from body log '{{ directionToString $direction}}'
+          on keyup[key == '{{ directionToKey $direction}}'] from body log '{{ directionToString $direction}}' 
+            send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }}) to <main/>
+            then call htmx.ajax(
+              'GET',
+              '/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}',
+              '#room-view'
+            )
         "
       >
       Go {{ directionToString $direction }}</a>
