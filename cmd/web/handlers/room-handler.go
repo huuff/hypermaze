@@ -37,8 +37,13 @@ func (handler RoomHandler) Room(c *gin.Context) {
     "Room": room,
     "Level": params.Level,
   }
+
+  if c.GetHeader("HX-Target") == "room-view" {
+    c.HTML(http.StatusOK, "room-view.html.gotmpl", data)
+  } else {
+    c.HTML(http.StatusOK, "room.html.gotmpl", data)
+  }
   
-  c.HTML(http.StatusOK, "room.html.gotmpl", data)
 }
 
 func (handler RoomHandler) Minimap(c *gin.Context) {

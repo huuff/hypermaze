@@ -1,0 +1,20 @@
+<div id="room-view">
+  <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span><p>
+  <ul class="move-controls">
+  {{ range $direction, $room := .Room.Connections }}
+    <li class="{{ $direction | directionToString | toLower }}">
+      <a 
+        hx-get="/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}"
+        hx-target="#room-view"
+        hx-select="#room-view"
+        hx-push-url="true"
+        _="
+          on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to <main/>
+          on keyup[key == '{{ directionToKey $direction}}'] from body log '{{ directionToString $direction}}'
+        "
+      >
+      Go {{ directionToString $direction }}</a>
+    </li>
+  {{ end }}
+  </ul>
+</div>
