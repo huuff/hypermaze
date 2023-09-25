@@ -27,7 +27,7 @@ func (handler MazeHandler) Ascii(c *gin.Context) {
 
   maze := handler.Mazes[level]
 
-  c.HTML(http.StatusOK, "maze-ascii-view.html.gotmpl", gin.H {
+  c.HTML(http.StatusOK, "maze-ascii.html.gotmpl", gin.H {
     "View": ascii.View(*maze, nil),
   })
 }

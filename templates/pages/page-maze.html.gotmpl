@@ -4,7 +4,7 @@
   <body hx-boost="true">
     <main>
       <h1>Level {{ .Level }}</h1>
-      {{ template "maze-ascii-view.html.gotmpl" . }}
+      {{ template "maze-ascii.html.gotmpl" . }}
       <dl>
         <dt>Size</dt> <dd>{{ .Maze.Grid.Width }}x{{ .Maze.Grid.Height }}</dd>
         <dt>Entrance</dt> <dd>{{ template "coordinates.gotmpl" .Maze.Entrance.Location}} {{ .Maze.Entrance.Direction | directionToString }}</dd>
