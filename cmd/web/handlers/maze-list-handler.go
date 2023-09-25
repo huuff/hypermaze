@@ -32,7 +32,7 @@ func (handler MazeListHandler) Ascii(c *gin.Context) {
 }
 
 func (handler MazeListHandler) MazeList(c *gin.Context) {
-  c.HTML(http.StatusOK, "page-index.html.gotmpl", gin.H {
+  c.HTML(http.StatusOK, "page-maze-list.html.gotmpl", gin.H {
     "Mazes": handler.Mazes,
   })
 }
