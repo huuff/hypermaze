@@ -13,25 +13,6 @@ type MazeHandler struct {
   Mazes []*maze.Maze
 }
 
-func (handler MazeHandler) Ascii(c *gin.Context) {
-  level, err := strconv.Atoi(c.Param("level"))
-  if err != nil {
-    c.String(http.StatusBadRequest, err.Error())
-    return
-  }
-
-  if level >= len(handler.Mazes) {
-    c.String(http.StatusNotFound, "")
-    return
-  }
-
-  maze := handler.Mazes[level]
-
-  c.HTML(http.StatusOK, "maze-ascii.html.gotmpl", gin.H {
-    "View": ascii.View(*maze, nil),
-  })
-}
-
 func (handler MazeHandler) Maze(c *gin.Context) {
   level, err := strconv.Atoi(c.Param("level"))
 
