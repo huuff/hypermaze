@@ -38,10 +38,10 @@ func (handler RoomHandler) Room(c *gin.Context) {
     "Level": params.Level,
   }
 
-  if c.GetHeader("HX-Target") == "room-view" {
-    c.HTML(http.StatusOK, "room-view.html.gotmpl", data)
-  } else {
+  if c.GetHeader("HX-Target") == "room" {
     c.HTML(http.StatusOK, "room.html.gotmpl", data)
+  } else {
+    c.HTML(http.StatusOK, "page-room.html.gotmpl", data)
   }
   
 }

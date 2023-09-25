@@ -1,4 +1,4 @@
-<div id="room-view">
+<div id="room">
   <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span><p>
   <ul class="move-controls">
   {{ range $direction, $room := .Room.Connections }}
@@ -10,7 +10,7 @@
             call htmx.ajax(
               'GET',
               '/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}',
-              '#room-view'
+              '#room'
             )
           end
         "

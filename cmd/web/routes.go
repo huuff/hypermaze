@@ -8,7 +8,7 @@ import (
 )
 
 func (app application) index(c *gin.Context) {
-  c.HTML(http.StatusOK, "index.html.gotmpl", gin.H {
+  c.HTML(http.StatusOK, "page-index.html.gotmpl", gin.H {
     "Mazes": app.mazes,
   })
 }

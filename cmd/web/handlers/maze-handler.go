@@ -53,5 +53,5 @@ func (handler MazeHandler) Maze(c *gin.Context) {
     "Maze": maze,
   }
 
-  c.HTML(http.StatusOK, "maze.html.gotmpl", data)
+  c.HTML(http.StatusOK, "page-maze.html.gotmpl", data)
 }
