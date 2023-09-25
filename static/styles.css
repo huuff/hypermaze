@@ -68,3 +68,7 @@ ul {
 #minimap {
   width: 250px;
 }
+
+.hidden {
+  display: none;
+}

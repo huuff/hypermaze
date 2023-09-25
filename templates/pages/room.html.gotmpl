@@ -33,19 +33,25 @@
             { swap: 'innerHTML', target: me }
           )
         "
+        class="hidden"
         hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
         hx-trigger="load"
-        style="display: none"
       >
       </div>
       <p>TODO: Currently, we always load the minimap on every room change but that's wasteful, try to only load it if it's showing</p>
 
       <button type="button"
         _="
-          on click toggle the *display of #minimap
+          on click toggle .hidden on #minimap then
+          if #minimap matches .hidden
+          then
+            set my.innerText to 'Open minimap'
+          else
+            set my.innerText to 'Close minimap'
+          end
         "
       >
-        Toggle minimap (TODO: change this text depending on whether its open or closed)
+        Open minimap
       </button>
 
       <a 
