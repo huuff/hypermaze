@@ -1,13 +1,15 @@
 package handlers
 
 import (
-  "github.com/gin-gonic/gin"
-  "xyz.haff/maze/pkg/maze"
-  "xyz.haff/maze/pkg/grid"
-  "xyz.haff/maze/pkg/ascii"
-  "errors"
-  "fmt"
-  "net/http"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"xyz.haff/maze/cmd/web/util"
+	"xyz.haff/maze/pkg/ascii"
+	"xyz.haff/maze/pkg/grid"
+	"xyz.haff/maze/pkg/maze"
 )
 
 type RoomHandler struct {
@@ -40,6 +42,14 @@ func (handler RoomHandler) Room(c *gin.Context) {
     "IsExit": maze.Exit.Location.Equals(room.Location),
   }
 
+  // TODO: Can't use the ETag match as-is here!! Since
+  // the response depends on the HX-Target header and I do not include it
+  // in the ETag, using this as-is will cause returning
+  // the full page when only a fragment is required
+  //if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
+    //return
+  //}
+
   if c.GetHeader("HX-Target") == "room" {
     c.HTML(http.StatusOK, "room.html.gotmpl", data)
   } else {
@@ -60,11 +70,17 @@ func (handler RoomHandler) Minimap(c *gin.Context) {
     return
   }
 
-  c.HTML(http.StatusOK, "maze-ascii.html.gotmpl", gin.H {
+  data := gin.H {
     "View": ascii.View(*maze, &room.Location),
     "Level": params.Level,
     "Room": room,
-  })
+  }
+
+  if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
+    return
+  }
+
+  c.HTML(http.StatusOK, "maze-ascii.html.gotmpl", data)
 }
 
 func (handler RoomHandler) findRoom(roomUri RoomUri) (*maze.Maze, *maze.Room, error) {

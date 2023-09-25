@@ -1,6 +1,5 @@
 # Tasks
 * Add a favicon?
-* Caching headers in responses
 * Preload with HTMX or hyperscript
 * Implement JSON+HAL
 * Implement Maze+XML

@@ -5,8 +5,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"xyz.haff/maze/pkg/maze"
+	"xyz.haff/maze/cmd/web/util"
 	"xyz.haff/maze/pkg/ascii"
+	"xyz.haff/maze/pkg/maze"
 )
 
 type MazeHandler struct {
@@ -32,6 +33,10 @@ func (handler MazeHandler) Maze(c *gin.Context) {
     "Level": level,
     "View": ascii.View(*maze, nil),
     "Maze": maze,
+  }
+
+  if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
+    return
   }
 
   c.HTML(http.StatusOK, "page-maze.html.gotmpl", data)
