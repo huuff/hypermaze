@@ -2,7 +2,12 @@
 <html lang="en">
   {{ template "head.html.gotmpl" . }}
   <body hx-boost="true">
-    <main>
+    <main
+      _="
+        init set $x to {{ .Room.Location.X }} then set $y to {{ .Room.Location.Y }}
+        on changedRoom(x, y) set $x to x then set $y to y
+      "
+    >
       <h1>Level {{ .Level }}</h1>
       <div id="room-view">
         <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span><p>
@@ -26,19 +31,16 @@
       </div>
 
       <div id="minimap"
-        _="
-          on changedRoom(x, y) from <main/> call htmx.ajax(
-            'GET',
-            `/mazes/{{ .Level }}/room/${x}/${y}/minimap`,
-            { swap: 'innerHTML', target: me }
-          )
-        "
         class="hidden"
-        hx-get="/mazes/{{ .Level }}/room/{{ .Room.Location.X }}/{{ .Room.Location.Y }}/minimap"
-        hx-trigger="load"
+        _="
+          on changedRoom(x, y) from <main/>
+          if I do not match .hidden
+          then
+            fetch `/mazes/{{ .Level }}/room/${x}/${y}/minimap` then put it into #minimap
+          end
+        "
       >
       </div>
-      <p>TODO: Currently, we always load the minimap on every room change but that's wasteful, try to only load it if it's showing</p>
 
       <button type="button"
         _="
@@ -48,6 +50,7 @@
             set my.innerText to 'Open minimap'
           else
             set my.innerText to 'Close minimap'
+            fetch `/mazes/{{ .Level }}/room/${$x}/${$y}/minimap` then put it into #minimap
           end
         "
       >
