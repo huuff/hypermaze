@@ -4,19 +4,15 @@
   {{ range $direction, $room := .Room.Connections }}
     <li class="{{ $direction | directionToString | toLower }}">
       <a 
-        hx-get="/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}"
-        hx-target="#room-view"
-        hx-select="#room-view"
-        hx-push-url="true"
         _="
-          on click send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }} ) to <main/>
-          on keyup[key == '{{ directionToKey $direction}}'] from body log '{{ directionToString $direction}}' 
+          on click or keyup[key == '{{ directionToKey $direction}}'] from body
             send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }}) to <main/>
-            then call htmx.ajax(
+            call htmx.ajax(
               'GET',
               '/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}',
               '#room-view'
             )
+          end
         "
       >
       Go {{ directionToString $direction }}</a>
