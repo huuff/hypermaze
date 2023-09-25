@@ -4,12 +4,11 @@
       <a 
          href="/mazes/{{$index}}"
           _="
-              on mouseenter show next .tooltip
-              on mouseleave hide next .tooltip
+              on mouseenter toggle the *display of the next .tooltip until mouseleave
               on mousemove(clientX, clientY)
                 set (next .tooltip)'s style.left to `${clientX}px`
                 then set (next .tooltip)'s style.top to `${clientY}px`
-              on click hide next .tooltip
+              on click hide the next .tooltip
             "
       >Level {{ $index }}</a>
       <div 
