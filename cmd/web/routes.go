@@ -5,13 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"xyz.haff/maze/cmd/web/handlers"
+	"xyz.haff/maze/pkg/maze"
 )
 
 
-func (app application) initRouter(router *gin.Engine) http.Handler {
-  mazeHandler := handlers.MazeHandler { Mazes: app.mazes }
-  roomHandler := handlers.RoomHandler { Mazes: app.mazes }
-  mazeListHandler := handlers.MazeListHandler { Mazes: app.mazes }
+func initRouter(router *gin.Engine, mazes []*maze.Maze) {
+  mazeHandler := handlers.MazeHandler { Mazes: mazes }
+  roomHandler := handlers.RoomHandler { Mazes: mazes }
+  mazeListHandler := handlers.MazeListHandler { Mazes: mazes }
 
   router.Static("/static", "./static")
   router.GET("/", func(c *gin.Context) {
@@ -27,6 +28,4 @@ func (app application) initRouter(router *gin.Engine) http.Handler {
   router.GET("/mazes/:level/room/:x/:y", roomHandler.Room)
   router.GET("/mazes/:level/room/:x/:y/minimap", roomHandler.Minimap)
 
-  
-  return router
 }
