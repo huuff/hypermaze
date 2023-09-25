@@ -27,7 +27,7 @@ func (handler RoomHandler) Room(c *gin.Context) {
     return
   }
 
-  _, room, err := handler.findRoom(params)
+  maze, room, err := handler.findRoom(params)
   if err != nil {
     c.String(http.StatusNotFound, err.Error())
     return
@@ -36,6 +36,8 @@ func (handler RoomHandler) Room(c *gin.Context) {
   data := gin.H {
     "Room": room,
     "Level": params.Level,
+    "IsEntrance": maze.Entrance.Location.Equals(room.Location),
+    "IsExit": maze.Exit.Location.Equals(room.Location),
   }
 
   if c.GetHeader("HX-Target") == "room" {
