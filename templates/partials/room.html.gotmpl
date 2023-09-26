@@ -1,5 +1,7 @@
 <div id="room">
-  <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span><p>
+  <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span>
+  <i class="fa-solid fa-circle-info"></i>
+  <p>
   {{ if .IsEntrance }}
     <p>You're at the entrance of the maze.</p>
   {{ end }}
