@@ -32,6 +32,7 @@ func (handler MazeListHandler) Ascii(c *gin.Context) {
     "View": ascii.View(*maze, nil),
   }
 
+  util.AddDefaultCacheHeaders(c)
   if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
     return
   }
@@ -44,6 +45,7 @@ func (handler MazeListHandler) MazeList(c *gin.Context) {
     "Mazes": handler.Mazes,
   }
   
+  util.AddDefaultCacheHeaders(c)
   if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
     return
   }

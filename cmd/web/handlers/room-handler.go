@@ -44,6 +44,7 @@ func (handler RoomHandler) Room(c *gin.Context) {
   }
 
   c.Header("Vary", "HX-Target")
+  util.AddDefaultCacheHeaders(c)
 
   etagExtraData := gin.H {
     "HX-Target": c.GetHeader("HX-Target"),
@@ -78,6 +79,7 @@ func (handler RoomHandler) Minimap(c *gin.Context) {
     "Room": room,
   }
 
+  util.AddDefaultCacheHeaders(c)
   if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
     return
   }

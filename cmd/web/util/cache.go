@@ -21,3 +21,8 @@ func SetAndCheckEtag(c *gin.Context, data any) bool {
     return false
   }
 }
+
+const maxAgeSeconds int = 600
+func AddDefaultCacheHeaders(c *gin.Context) {
+  c.Header("Cache-Control", fmt.Sprintf("max-age=%d", maxAgeSeconds))
+}

@@ -35,6 +35,7 @@ func (handler MazeHandler) Maze(c *gin.Context) {
     "Maze": maze,
   }
 
+  util.AddDefaultCacheHeaders(c)
   if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
     return
   }
