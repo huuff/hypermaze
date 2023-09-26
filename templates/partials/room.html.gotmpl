@@ -1,5 +1,15 @@
 <div id="room">
   <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span><p>
+  {{ if .IsEntrance }}
+    <p>You're at the entrance of the maze.</p>
+  {{ end }}
+
+  {{ if .IsExit }}
+    <p>
+      You're at the exit of the maze.
+      <a href="/">Click here to leave.</a>
+    </p>
+  {{ end }}
   <ul class="move-controls">
   {{ range $direction, $room := .Room.Connections }}
     <li class="{{ $direction | directionToString | toLower }}">
@@ -23,14 +33,4 @@
   {{ end }}
   </ul>
 
-  {{ if .IsEntrance }}
-    <p>You're at the entrance of the maze</p>
-  {{ end }}
-
-  {{ if .IsExit }}
-    <p>
-      You're at the exit of the maze.
-      <a href="/">Click here to leave</a>
-    </p>
-  {{ end }}
 </div>
