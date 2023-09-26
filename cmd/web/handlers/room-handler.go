@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/samber/lo"
 	"xyz.haff/maze/cmd/web/util"
 	"xyz.haff/maze/pkg/ascii"
 	"xyz.haff/maze/pkg/grid"
@@ -42,13 +43,14 @@ func (handler RoomHandler) Room(c *gin.Context) {
     "IsExit": maze.Exit.Location.Equals(room.Location),
   }
 
-  // TODO: Can't use the ETag match as-is here!! Since
-  // the response depends on the HX-Target header and I do not include it
-  // in the ETag, using this as-is will cause returning
-  // the full page when only a fragment is required
-  //if etagMatch := util.SetAndCheckEtag(c, data); etagMatch {
-    //return
-  //}
+  c.Header("Vary", "HX-Target")
+
+  etagExtraData := gin.H {
+    "HX-Target": c.GetHeader("HX-Target"),
+  }
+  if etagMatch := util.SetAndCheckEtag(c, lo.Assign[string, any](data, etagExtraData)); etagMatch {
+    return
+  }
 
   if c.GetHeader("HX-Target") == "room" {
     c.HTML(http.StatusOK, "room.html.gotmpl", data)
