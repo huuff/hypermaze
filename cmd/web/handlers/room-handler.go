@@ -45,6 +45,12 @@ func (handler RoomHandler) Room(c *gin.Context) {
 
   c.Header("Vary", "HX-Target")
   util.AddDefaultCacheHeaders(c)
+  // HACK, FUTURE: Since I'm using hyperscript to fetch these urls
+  // the hx-push-url attribute doesn't seem to work.
+  // therefore I'm passing it from the backend. This isn't
+  // too good a solution because this string is hardcoded
+  // here and in the template, and both representations may drift
+  c.Header("HX-Push-Url", fmt.Sprintf("/mazes/%d/room/%d/%d", params.Level, params.X, params.Y))
 
   etagExtraData := gin.H {
     "HX-Target": c.GetHeader("HX-Target"),
