@@ -5,11 +5,14 @@
     <li class="{{ $direction | directionToString | toLower }}">
       <a 
         _="
+          init set :url to '/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}'
+          install Preload(url: :url)
+
           on click or keyup[key == '{{ directionToKey $direction}}'] from body
             send changedRoom(x: {{ $room.Location.X }}, y: {{ $room.Location.Y }}) to <main/>
             call htmx.ajax(
               'GET',
-              '/mazes/{{ $.Level }}/room/{{ $room.Location.X }}/{{ $room.Location.Y }}',
+              :url,
               '#room'
             )
           end

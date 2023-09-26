@@ -1,0 +1,5 @@
+behavior Preload(url)
+  on mouseover
+    fetch `${url}` 
+  end
+end

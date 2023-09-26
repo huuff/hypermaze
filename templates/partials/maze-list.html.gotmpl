@@ -2,8 +2,13 @@
   {{ range $index, $maze := .Mazes }}
     <li>
       <a 
-         href="/mazes/{{$index}}"
+          href="/mazes/{{$index}}"
           _="
+              init set :url to '/mazes/{{$index}}'
+              install Preload(url: :url)
+
+              -- id like to do 'on click go to `${:url}`' instead of href but this crashes in the browser'
+
               on mouseenter toggle the *display of the next .tooltip until mouseleave
               on mousemove(clientX, clientY)
                 set (next .tooltip)'s style.left to `${clientX}px`
