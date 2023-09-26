@@ -10,7 +10,7 @@ import (
 
 const mazeAmount = 5
 
-var mazeSizes []int = []int { 3, 5, 7, 10, 12 }
+var mazeSizes []int = []int { 3, 5, 7, 10, 12, 15, 17, 20, 22, 25 }
 
 // TODO: Maybe just one function to generate a maze and call it several times?
 
