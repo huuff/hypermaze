@@ -7,7 +7,7 @@
               init set :url to '/mazes/{{$index}}'
               install Preload(url: :url)
 
-              -- id like to do 'on click go to `${:url}`' instead of href but this crashes in the browser'
+              -- FUTURE: id like to do 'on click go to `${:url}`' instead of href but this crashes in the browser'
 
               on mouseenter toggle the *display of the next .tooltip until mouseleave
               on mousemove(clientX, clientY)
