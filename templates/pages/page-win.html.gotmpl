@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "head.html.gotmpl" . }}
+  <body hx-boost="true">
+    <main>
+      <h1>Congratulations!</h1>
+      <h2>You finished level {{ .Level }}</h2>
+
+      {{ if .NextLevel }}
+        <p>
+          Do you want to keep going on your quest to solve all mazes in the world?. Then 
+          <a href="/mazes/{{ .NextLevel }}">Click here</a>
+          to go to the next level.
+        </p>
+      {{ end }}
+    </main>
+  </body>
+  {{ template "footer.html.gotmpl" . }}
+</html>

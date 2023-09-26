@@ -7,7 +7,7 @@
   {{ if .IsExit }}
     <p>
       You're at the exit of the maze.
-      <a href="/">Click here to leave.</a>
+      <a href="/mazes/{{ .Level }}/win">Click here to leave.</a>
     </p>
   {{ end }}
   <ul class="move-controls">

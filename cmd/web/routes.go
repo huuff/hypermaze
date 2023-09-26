@@ -13,6 +13,7 @@ func initRouter(router *gin.Engine, mazes []*maze.Maze) {
   mazeHandler := handlers.MazeHandler { Mazes: mazes }
   roomHandler := handlers.RoomHandler { Mazes: mazes }
   mazeListHandler := handlers.MazeListHandler { Mazes: mazes }
+  winHandler := handlers.WinHandler { Mazes: mazes }
 
   router.Static("/static", "./static")
   router.GET("/", func(c *gin.Context) {
@@ -27,4 +28,5 @@ func initRouter(router *gin.Engine, mazes []*maze.Maze) {
   router.GET("/mazes/:level/room/:x/:y", roomHandler.Room)
   router.GET("/mazes/:level/room/:x/:y/minimap", roomHandler.Minimap)
 
+  router.GET("/mazes/:level/win", winHandler.Win)
 }
