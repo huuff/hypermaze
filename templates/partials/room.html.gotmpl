@@ -1,7 +1,13 @@
 <div id="room">
   <p>You're at <span>{{ template "coordinates.gotmpl" .Room.Location }}</span>
-  <i class="fa-solid fa-circle-info"></i>
-  <p>
+  <i class="fa-solid fa-circle-info" _="install TooltipTrigger"></i>
+  </p>
+  <div 
+    class="tooltip box container crowded"
+    style="display: none"
+  >
+    You can move by using your arrow keys
+  </div>
   {{ if .IsEntrance }}
     <p>You're at the entrance of the maze.</p>
   {{ end }}

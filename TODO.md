@@ -1,5 +1,4 @@
 # Tasks
-* Add a text to indicate to the user they can move with arrow keys. (Maybe on a hover on an info icon? it's a nice opportunity to bring a hover hyperscript behavior)
 * Rename the project to hypermaze
 * Implement JSON+HAL
 * Implement Maze+XML
