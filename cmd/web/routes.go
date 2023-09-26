@@ -24,7 +24,6 @@ func initRouter(router *gin.Engine, mazes []*maze.Maze) {
 
   router.GET("/mazes/:level", mazeHandler.Maze)
 
-  // TODO: I'd like to have :x,:y but gin-gonic doesn't allow it... what do I do?
   router.GET("/mazes/:level/room/:x/:y", roomHandler.Room)
   router.GET("/mazes/:level/room/:x/:y/minimap", roomHandler.Minimap)
 
