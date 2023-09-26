@@ -4,3 +4,15 @@ behavior Preload(url)
     fetch `${url}` 
   end
 end
+
+behavior TooltipTrigger
+  -- FUTURE: Can I initially hide the tooltip here?
+  on mouseenter toggle the *display of the next .tooltip until mouseleave
+
+  on mousemove(clientX, clientY)
+    set (next .tooltip)'s style.left to `${clientX}px`
+    then set (next .tooltip)'s style.top to `${clientY}px`
+  end
+
+  on click hide the next .tooltip
+end

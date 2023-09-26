@@ -6,14 +6,9 @@
           _="
               init set :url to '/mazes/{{$index}}'
               install Preload(url: :url)
+              install TooltipTrigger
 
               -- FUTURE: id like to do 'on click go to `${:url}`' instead of href but this crashes in the browser'
-
-              on mouseenter toggle the *display of the next .tooltip until mouseleave
-              on mousemove(clientX, clientY)
-                set (next .tooltip)'s style.left to `${clientX}px`
-                then set (next .tooltip)'s style.top to `${clientY}px`
-              on click hide the next .tooltip
             "
       >Level {{ $index }}</a>
       <div 
