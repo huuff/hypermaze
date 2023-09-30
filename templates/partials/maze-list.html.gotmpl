@@ -4,8 +4,7 @@
       <a 
           href="/mazes/{{$index}}"
           _="
-              init set :url to '/mazes/{{$index}}'
-              install Preload(url: :url)
+              install Preload(url: '/mazes/{{$index}}')
               install TooltipTrigger
 
               -- FUTURE: id like to do 'on click go to `${:url}`' instead of href but this crashes in the browser'
