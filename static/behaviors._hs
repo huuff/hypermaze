@@ -1,6 +1,5 @@
 behavior Preload(url)
-  -- FUTURE: Isn't there a 'once' or something event modifier that prevents running this many times?
-  on mouseover
+  on mouseover 1
     fetch `${url}` 
   end
 end
