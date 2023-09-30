@@ -8,7 +8,7 @@ behavior TooltipTrigger
   -- FUTURE: Can I initially hide the tooltip here?
   on mouseenter toggle the *display of the next .tooltip until mouseleave
 
-  on mousemove(clientX, clientY)
+  on mousemove(clientX, clientY) throttled at 25ms
     set (next .tooltip)'s style.left to `${clientX}px`
     then set (next .tooltip)'s style.top to `${clientY}px`
   end
