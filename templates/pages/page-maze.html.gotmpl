@@ -7,8 +7,26 @@
       {{ template "maze-ascii.html.gotmpl" . }}
       <dl>
         <dt>Size</dt> <dd>{{ .Maze.Grid.Width }}x{{ .Maze.Grid.Height }}</dd>
-        <dt>Entrance</dt> <dd>{{ template "coordinates.gotmpl" .Maze.Entrance.Location}} {{ .Maze.Entrance.Direction | directionToString }}</dd>
-        <dt>Exit</dt> <dd>{{ template "coordinates.gotmpl" .Maze.Exit.Location}} {{ .Maze.Exit.Direction | directionToString }}</dd>
+        <dt>Entrance</dt> 
+        <dd>
+          {{ template "coordinates.gotmpl" .Maze.Entrance.Location}} {{ .Maze.Entrance.Direction | directionToString }}
+          <i class="fa-solid fa-circle-info"
+             _="install TooltipTrigger"></i>
+          <div class="tooltip box container crowded"
+               style="display: none">
+            The entrance is marked with an <strong>a</strong> in the minimap
+          </div>
+        </dd>
+        <dt>Exit</dt> 
+        <dd>
+          {{ template "coordinates.gotmpl" .Maze.Exit.Location}} {{ .Maze.Exit.Direction | directionToString }}
+          <i class="fa-solid fa-circle-info"
+             _="install TooltipTrigger"></i>
+          <div class="tooltip box container crowded"
+               style="display: none">
+            The exit is marked with an <strong>e</strong> in the minimap
+          </div>
+        </dd>
       </dl>
       <a 
         href="/mazes/{{ .Level }}/room/{{ .Maze.Entrance.Location.X}}/{{ .Maze.Entrance.Location.Y }}"
