@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-  "strings"
 
 	"github.com/gin-gonic/gin"
 	"xyz.haff/maze/cmd/web/hal"
@@ -46,13 +45,15 @@ func (handler MazeListHandler) Ascii(c *gin.Context) {
 
 func (handler MazeListHandler) MazeList(c *gin.Context) {
   accepted := c.GetHeader("Accept")
-  if strings.Contains(accepted, "application/json") ||
-     strings.Contains(accepted, "application/hal+json") {
-    handler.MazeListHAL(c)
-  } else if strings.Contains(accepted, "text/html") {
-    handler.MazeListHTML(c)
-  } else {
-    c.String(http.StatusNotAcceptable, "Can only provide application/hal+json or text/html")
+  switch (accepted) {
+    case "application/json":
+      fallthrough
+    case "application/hal+json":
+      handler.MazeListHAL(c)
+    case "text/html":
+      handler.MazeListHTML(c)
+    default:
+      c.String(http.StatusNotAcceptable, "Can only provide application/hal+json or /text/html")
   }
 }
 
